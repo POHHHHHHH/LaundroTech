@@ -31,6 +31,7 @@ footer, header, hgroup, menu, nav, section {
 
 body {
 	line-height: 1;
+	padding-bottom: 60px;
 }
 
 ol, ul {
@@ -3327,3 +3328,26 @@ input, select, textarea {
 			}
 
 		}
+
+
+	/* #bookingDate{
+		width: 400px;
+		float: left;
+		position: absolute;
+		left: 30%;
+		/* columns: 50%; }*/
+	
+
+	#bookingTime{
+		width: 400px;
+		/* columns: 50%; */
+		float: left;
+		position: absolute;
+		left: 55%;
+
+	}
+
+	/* div.ui-datepicker{
+		width: 400px;
+	}
+	 */
