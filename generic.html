@@ -54,12 +54,13 @@
 				var today = new Date().toISOString().split('T')[0];
 				document.getElementsByName("bookingDate")[0].setAttribute('min', today);
 
-				var date = new Date(getElementById("bookingDate").value);
+				var date = new Date(document.getElementById("bookingDate").value);
 				var day = date.getDate();
 				var month = date.getMonth();
 				var year = date.getFullYear();
 
 				var selectedDate = day + "/" + month + "/" + year;
+				console.log(selectedDate)
 				var myHeaders = new Headers(); 
 				myHeaders.append("Content-Type", "application/json");
 
@@ -75,7 +76,8 @@
 				fetch("https://3rczj928aa.execute-api.us-east-1.amazonaws.com/prod/gettimeslot", requestOptions)
 				.then(response => response.text())
 				.then(result => {
-					const data = JSON.parse(result);
+					var data = JSON.parse(result);
+					console.log("before if" + data.length);
 					if(data.length < 1){
 						raw = JSON.stringify({"query":"SELECT bookingTime FROM laundrotech.Timeslot"});
 						fetch("https://3rczj928aa.execute-api.us-east-1.amazonaws.com/prod/gettimeslot", requestOptions)
@@ -91,6 +93,7 @@
 						.catch(error => console.log('error', error));
 					}
 					else{
+						console.log("else");
 						for (var i = 0; i < data.length; i++) {
 						str += "<option>" + data[i].bookingTime + "</option>"
 					}
