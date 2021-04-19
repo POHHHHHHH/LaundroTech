@@ -90,8 +90,13 @@
 
 
 				// make API call with parameters and use promises to get response
-				var data = fetch("https://3rczj928aa.execute-api.us-east-1.amazonaws.com/prod/gettimeslot", requestOptions)
-				alert(data)
+				fetch("https://3rczj928aa.execute-api.us-east-1.amazonaws.com/prod/gettimeslot", requestOptions)
+				.then(response => response.text())
+				.then(result => {
+					const data = JSON.parse(result);
+					alert(data[0].bookingTime);
+				})
+				.catch(error => console.log('error', error));
 			}
 		</script>
 	</head>
