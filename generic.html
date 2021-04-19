@@ -64,17 +64,13 @@
 			
 			
 				// make API call with parameters and use promises to get response
-				fetch("https://3rczj928aa.execute-api.us-east-1.amazonaws.com/prod/gettimeslot", requestOptions)
-				.then(response => response.text())
-				.then(result => {
-					var str = ""
-					for(var key in result){
-						str += "<option>" + result[key].bookingTime.toString() + "</option>"
-					}
-
-					document.getElementById("bookingTime").innerHTML = str;
-				})
-				.catch(error => console.log('error', error));
+				var response = await fetch("https://3rczj928aa.execute-api.us-east-1.amazonaws.com/prod/gettimeslot", requestOptions);
+				var data = await response.json();
+				data.forEach(obj => {
+				Object.entries(obj).forEach(([key, value]) => {
+					console.log(`${key} ${value}`);
+					});
+				});
 			}
 			window.onload = selectDate;
 				
