@@ -70,7 +70,7 @@
 				var myHeaders = new Headers(); 
 				myHeaders.append("Content-Type", "application/json");
 
-				var raw = JSON.stringify({"query":"SELECT ts.bookingTime FROM (SELECT t.bookingTime, w.washingMachineID FROM Booking AS b, WashingMachine AS w, Timeslot AS t WHERE b.FK_washingMachineID = w.washingMachineID AND w.location= 'pioneer' AND b.FK_timeslotID <> t.timeslotID AND b.bookingDate = '19/04/2021' UNION SELECT t.bookingTime, w.washingMachineID FROM Booking AS b, WashingMachine AS w, Timeslot AS t WHERE (w.washingMachineID NOT IN (SELECT bk.FK_washingMachineID FROM Booking AS bk WHERE bk.bookingDate = '19/04/2021')) AND w.location= 'pioneer') AS ts GROUP BY ts.bookingTime"});
+				var raw = JSON.stringify({"query":"SELECT ts.bookingTime FROM (SELECT t.bookingTime, w.washingMachineID FROM Booking AS b, WashingMachine AS w, Timeslot AS t WHERE b.FK_washingMachineID = w.washingMachineID AND w.location= 'pioneer' AND b.FK_timeslotID <> t.timeslotID AND b.bookingDate = '" + selectedDate + "' UNION SELECT t.bookingTime, w.washingMachineID FROM Booking AS b, WashingMachine AS w, Timeslot AS t WHERE (w.washingMachineID NOT IN (SELECT bk.FK_washingMachineID FROM Booking AS bk WHERE bk.bookingDate = '" + selectedDate + "')) AND w.location= 'pioneer') AS ts GROUP BY ts.bookingTime"});
 				console.log(raw);
 				var requestOptions = {
 					method: 'POST',
