@@ -78,29 +78,29 @@
 				.then(response => response.text())
 				.then(result => {
 					var data = JSON.parse(result);
-					console.log("before if" + data.length);
-					if(data.length < 1){
-						raw = JSON.stringify({"query":"SELECT bookingTime FROM laundrotech.Timeslot"});
-						fetch("https://3rczj928aa.execute-api.us-east-1.amazonaws.com/prod/gettimeslot", requestOptions)
-						.then(response => response.text())
-						.then(result => {
-							data = JSON.parse(result);
-							console.log("in if" + data.length)
-							for (var i = 0; i < data.length; i++) {
-								str += "<option>" + data[i].bookingTime + "</option>"
-							}
-							document.getElementById("bookingTime").innerHTML = str;
+					// console.log("before if" + data.length);
+					// if(data.length < 1){
+					// 	raw = JSON.stringify({"query":"SELECT bookingTime FROM laundrotech.Timeslot"});
+					// 	fetch("https://3rczj928aa.execute-api.us-east-1.amazonaws.com/prod/gettimeslot", requestOptions)
+					// 	.then(response => response.text())
+					// 	.then(result => {
+					// 		data = JSON.parse(result);
+					// 		console.log("in if" + data.length)
+					// 		for (var i = 0; i < data.length; i++) {
+					// 			str += "<option>" + data[i].bookingTime + "</option>"
+					// 		}
+					// 		document.getElementById("bookingTime").innerHTML = str;
 
-						})
-						.catch(error => console.log('error', error));
-					}
-					else{
+					// 	})
+					// 	.catch(error => console.log('error', error));
+					// }
+					// else{
 						console.log("else");
 						for (var i = 0; i < data.length; i++) {
 						str += "<option>" + data[i].bookingTime + "</option>"
 					}
 					document.getElementById("bookingTime").innerHTML = str;
-					}
+					// }
 				})
 				.catch(error => console.log('error', error));
 			}
