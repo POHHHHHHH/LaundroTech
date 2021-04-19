@@ -50,7 +50,6 @@
 				 var myHeaders = new Headers(); 
 				// add content type header to object
 				myHeaders.append("Content-Type", "application/json");
-				myHeaders.append("Accept", "application/json")
 				// using built in JSON utility package turn object to string and store in a variable
 				//var raw = JSON.stringify({"firstName":firstName,"lastName":lastName});
 				var raw = JSON.stringify({"query":"SELECT ts.bookingTime FROM (SELECT t.bookingTime, w.washingMachineID FROM laundrotech.Booking AS b, laundrotech.WashingMachine AS w, laundrotech.Timeslot AS t WHERE b.FK_washingMachineID = w.washingMachineID AND w.location= 'pioneer' AND b.FK_timeslotID <> t.timeslotID AND b.bookingDate = '19/04/2021' UNION SELECT t.bookingTime, w.washingMachineID FROM laundrotech.Booking AS b, laundrotech.WashingMachine AS w, laundrotech.Timeslot AS t WHERE (w.washingMachineID NOT IN (SELECT bk.FK_washingMachineID FROM laundrotech.Booking AS bk)) AND w.location= 'pioneer' AND b.FK_timeslotID <> t.timeslotID AND b.bookingDate = '19/04/2021') AS ts GROUP BY ts.bookingTime"});
@@ -64,14 +63,8 @@
 			
 			
 				// make API call with parameters and use promises to get response
-				var response = await fetch("https://3rczj928aa.execute-api.us-east-1.amazonaws.com/prod/gettimeslot", requestOptions);
-				var data = await response.json();
+				var data = fetch("https://3rczj928aa.execute-api.us-east-1.amazonaws.com/prod/gettimeslot", requestOptions)
 				alert(data)
-				// data.forEach(obj => {
-				// Object.entries(obj).forEach(([key, value]) => {
-				// 	console.log(`${key} ${value}`);
-				// 	});
-				// });
 			}
 			window.onload = selectDate;
 				
