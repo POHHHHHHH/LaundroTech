@@ -64,7 +64,7 @@
 			
 				// make API call with parameters and use promises to get response
 				var data = fetch("https://3rczj928aa.execute-api.us-east-1.amazonaws.com/prod/gettimeslot", requestOptions)
-				alert(data)
+				alert(data.json())
 			}
 			window.onload = selectDate;
 				
