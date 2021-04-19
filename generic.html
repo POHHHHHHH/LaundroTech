@@ -67,11 +67,12 @@
 				.then(response => response.text())
 				.then(result => {
 					var str = ""
-					for(var i = 0; i < result.length; i++){
-						str += "<option>" + result[i].bookingTime + "</option>"
-					}
+					alert(result[0].bookingTime)
+					// for(var i = 0; i < result.length; i++){
+					// 	str += "<option>" + result[i].bookingTime + "</option>"
+					// }
 
-					document.getElementById("bookingTime").innerHTML = str;
+					// document.getElementById("bookingTime").innerHTML = str;
 				})
 				.catch(error => console.log('error', error));
 			}
