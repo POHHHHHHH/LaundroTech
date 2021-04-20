@@ -22,7 +22,8 @@ function getPromotion(){
         else{
             console.log("else");
             for (var i = 0; i < data.length; i++) {
-                str += "<article class='style"+ i+1 + "'>" + "<span class='image'>" + "<img src='images/pic"+ i+1 + ".jpg'/> </span>" + "<a href='payment.html' onclick='getPromotionID()'>" + "<h2 hidden id='promotionID' name='promotionID'>"+ data[i].promotionID +"</h2>" + "<h2 hidden id='price' name='price'>"+ data[i].price +"</h2>" + "<h2 hidden id='credit' name='credit'>"+ data[i].creditTopUp +"</h2>"+ "<h2 id='promotionName' name='promotionName'>"+ data[i].name +"</h2>" + "<div class='content'><p id='promotionDesc' name='promotionDesc'>"+ data[i].description+"</p></div></a></article>"
+                count = i + 1;
+                str += "<article class='style"+ count + "'>" + "<span class='image'>" + "<img src='images/pic"+ count + ".jpg'/> </span>" + "<a href='payment.html' onclick='getPromotionID()'>" + "<h2 hidden id='promotionID' name='promotionID'>"+ data[i].promotionID +"</h2>" + "<h2 hidden id='price' name='price'>"+ data[i].price +"</h2>" + "<h2 hidden id='credit' name='credit'>"+ data[i].creditTopUp +"</h2>"+ "<h2 id='promotionName' name='promotionName'>"+ data[i].name +"</h2>" + "<div class='content'><p id='promotionDesc' name='promotionDesc'>"+ data[i].description+"</p></div></a></article>"
                 
             }
             document.getElementById("promotionDetail").innerHTML = str;
