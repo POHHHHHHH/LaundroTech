@@ -48,14 +48,33 @@ $(function() {
         var isCardValid = $.payform.validateCardNumber(cardNumber.val());
         var isCvvValid = $.payform.validateCardCVC(CVV.val());
 
-        if(owner.val().length < 5){
-            alert("Wrong owner name");
+        if(owner.val().length < 4){
+            alert("Wrong card name");
         } else if (!isCardValid) {
             alert("Wrong card number");
         } else if (!isCvvValid) {
             alert("Wrong CVV");
         } else {
-            window.location.href = "./invoice.html";
+            var getUserID = sessionStorage.getItem("userID");
+            var getPromotionID = sessionStorage.getItem("promotionID");
+            var getPromotionPrice = sessionStorage.getItem("promotionPrice");
+            var getPromotionCredit = sessionStorage.getItem("promotionCredit");
+            let reg = /.{1,15}/;
+            var hiddenCardNumber = cardNumber.val().replace(reg, (m) => "X".repeat(m.length));
+            var cardName= owner.val();
+
+            //Today's Date
+            var today = new Date();
+            var dd = String(today.getDate()).padStart(2, '0');
+            var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+            var yyyy = today.getFullYear();
+            today = dd + '/' + mm + '/' + yyyy;
+            
+            // Insert into Transaction table
+            insertTransaction(getUserID,getPromotionID,getPromotionPrice,cardName,hiddenCardNumber,today);
+            // update User Table
+            updateUser(getUserID,getPromotionCredit);
+
         }
     });
 	
@@ -64,3 +83,54 @@ $(function() {
         window.location.href = "./index.html";
     });
 });
+
+
+
+function insertTransaction(userID,promotionID,amountPaid,cName,cCard,todayDate) {
+    var myHeaders = new Headers(); 
+	myHeaders.append("Content-Type", "application/json");
+	var raw = JSON.stringify({"query":"INSERT INTO `laundrotech`.`Transaction` (`FK_userID`, `FK_promotionID`, `amountPaid`, `date`, `cName`, `cCard`) VALUES ('" + userID + "', '"+ promotionID +"', '"+ amountPaid +"', '"+ todayDate +"', '"+ cName +"', '"+ cCard +"');"});
+	console.log(raw);
+	var requestOptions = {
+		method: 'POST',
+		headers: myHeaders,
+	    body: raw,
+		redirect: 'follow'
+		};
+
+	var str = "";
+	fetch("https://3rczj928aa.execute-api.us-east-1.amazonaws.com/prod/transaction", requestOptions)
+	.then(response => response.text())
+	.then(result => {
+        var data = JSON.parse(result);
+	})
+	.catch(error => console.log('error', error));
+}
+
+function updateUser(userID,credit) {
+    var myHeaders = new Headers(); 
+	myHeaders.append("Content-Type", "application/json");
+	var raw = JSON.stringify({"query":"UPDATE `laundrotech`.`User` SET `credit`= credit + "+ credit +" WHERE `userID`='"+ userID +"';"});
+	console.log(raw);
+	var requestOptions = {
+		method: 'POST',
+		headers: myHeaders,
+	    body: raw,
+		redirect: 'follow'
+		};
+
+	var str = "";
+	fetch("https://3rczj928aa.execute-api.us-east-1.amazonaws.com/prod/getuser", requestOptions)
+	.then(response => response.text())
+	.then(result => {
+        var data = JSON.parse(result);
+        window.location.href = "./transactionInvoice.html";
+	})
+	.catch(error => console.log('error', error));
+}
+
+
+function displayAmount(){
+    var getPromotionPrice = sessionStorage.getItem("promotionPrice");
+    document.getElementById("paymentAmount").innerHTML = "Total Amount: $" + getPromotionPrice;
+}

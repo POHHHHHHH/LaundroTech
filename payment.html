@@ -5,18 +5,19 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>LaundraTech - Payment</title>
-    <link href="paymentAssets/css/css.css" rel="stylesheet">
-    <link rel="stylesheet" href="paymentAssets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="paymentAssets/css/css.css" >
+	<link rel="stylesheet" href="paymentAssets/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="paymentAssets/css/styles.css">
     <link rel="stylesheet" type="text/css" href="paymentAssets/css/demo.css">
 </head>
+<script type="text/javascript"></script>
 
-<body>
+<body onload="displayAmount()">
     <div class="container-fluid">
         <div class="creditCardForm">
             <div class="heading">
                 <h1>Confirm Purchase</h1>
-				<h3 style="text-align:center">Total Amount: $50.00</h3>
+				<h3 style="text-align:center" id="paymentAmount"></h3>
             </div>
             <div class="payment">
                 <form>

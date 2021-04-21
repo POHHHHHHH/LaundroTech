@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>LaundraTech - Receipt</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="invoiceAssets/css/bootstrap.min.css" rel="stylesheet">
+    <style type="text/css">
+        body {
+            margin-top: 20px;
+        }                     
+    </style>
+    <script src="transactionAssets/jquery/jquery-3.6.0.min.js"></script>
+    <script src="invoiceAssets/js/jquery-1.11.1.min.js"></script>
+    <script src="invoiceAssets/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="transactionAssets/loader/style.css">
+</head>
+
+<script type="text/javascript" src="transactionAssets/js/transaction.js"></script>  
+<body onload="getTransactionReceipt()">
+
+<div class="container">
+    <div class="row">
+        <div class="well col-xs-10 col-sm-10 col-md-6 col-xs-offset-1 col-sm-offset-1 col-md-offset-3">
+            <div class="row">
+                <div class="col-xs-6 col-sm-6 col-md-6">
+                    <address>
+                        <strong>LaundraTech</strong>
+                        <br>
+                        2135 Sunset Blvd
+                        <br>
+                        Los Angeles, CA 90026
+                        <br>
+                    </address>
+                </div>
+                <div class="col-xs-6 col-sm-6 col-md-6 text-right">
+                    <p>
+                        <em id="purchaseDate"></em>
+                    </p>
+                    <p>
+                        <em id="purchaseTransactionID"></em>
+                    </p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="text-center">
+                    <h1>Receipt</h1>
+                </div>
+                </span>
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Purchase Details</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="col-md-9"><em id="purchasePlan"></em></td>
+                            <td class="col-md-1"></td>
+                            <td class="col-md-1"></td>
+                            <td class="col-md-1" id="purchasePlanPrice"></td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-9"><em id="purchasePlanDesc"></em></td>
+                            <td class="col-md-1"></td>
+                            <td class="col-md-1"></td>
+                            <td class="col-md-1"></td>
+                            
+                        </tr>
+                        <tr>
+                            <td> &nbsp; </td>
+                            <td> &nbsp; </td>
+                            <td class="text-right"><h4><strong>Total:&nbsp;</strong></h4></td>
+                            <td class="text-center text-danger"><h4><strong id="totalPurchasePrice"></strong></h4></td>
+                        </tr>
+                    </tbody>
+                </table>
+               
+                <button type="button" class="btn btn-success btn-lg btn-block" onclick="backToHome()">Back to Home Page</button>
+
+            </div>
+        </div>
+    </div>
+    
+    <div class="loader"><img src="images/loading.gif" alt="Loading..." /></div>
+    <script>
+        $(window).on("load",function(){
+            $(".loader").delay(1200).fadeOut("slow");
+        });
+    </script>
+</body>
+</html>
