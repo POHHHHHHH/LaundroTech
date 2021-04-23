@@ -5,8 +5,20 @@
 	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
 -->
 <html>
-	    <script>
-        // define the callAPI function that takes a first name and last name as parameters
+
+<link href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round"
+	rel="stylesheet">
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+<script>
+        <!-- define the callAPI function that takes a first name and last name as parameters
         var callAPI = (firstName,lastName)=>{
             // instantiate a headers object
             var myHeaders = new Headers(); 
@@ -21,14 +33,62 @@
                 body: raw,
                 redirect: 'follow'
             };
-		
-		
+
             // make API call with parameters and use promises to get response
-            fetch("https://hlimcu55w5.execute-api.us-east-1.amazonaws.com/JM/login", requestOptions)
+            fetch("https://3rczj928aa.execute-api.us-east-1.amazonaws.com/prod/authlogin", requestOptions)
             .then(response => response.text())
             .then(result => alert(JSON.parse(result).body))
             .catch(error => console.log('error', error));
+        } 
+        -->
+        
+        function checkLoginInfo(){
+        	var getUsername = document,getElementById("loginUsername").value;
+        	var getPassword = document,getElementById("loginPassword");
+        	var shaPassword = shaPassword(getPassword).toUpperCase();
+        	var myHeaders = new Headers(); 
+            myHeaders.append("Content-Type", "application/json");
+            var raw = JSON.stringify({
+            	"query" : "SELECT * FROM laundrotech.User WHERE '"+ username +"' = username" and password = '"+ shaPassword +"';"                        
+            	});
+            console.log(raw);
+            var requestOptions = {
+                method: 'POST',
+                headers: myHeaders,
+                body: raw,
+                redirect: 'follow'
         }
+            
+          fetch("https://hlimcu55w5.execute-api.us-east-1.amazonaws.com/prod/login", requestOptions)
+          .then(response => response.text())
+          .then(result => alert(JSON.parse(result).body))
+          var data = JSON.parse (result);
+            if data[0] == null){
+            	console.log("Wrong Username/Password");
+            	alert("Wrong Username/Password")
+            }
+            else {
+            	console.log("You have logged into LaundroTech");
+            	alert("You have logged into LaundroTech")
+            	sessionStorage.setItem("userID", data[0].userID);
+        	    sessionStorage.setItem("username", data[0].username);
+        	    sessionStorage.setItem("credit", "0");
+        	    //window.location.href = "./.html";
+            	
+            }	
+          
+          .catch(error => console.log('error', error));
+         
+	    //const obj = {userID : '1', username : 'Bob', credit : '0'};
+        
+	    //sessionStorage.setItem('userID', 'user1');
+	    //sessionStorage.setItem('username', 'name');
+	    //sessionStorage.setItem('credit', '0');
+        //console.log(sessionStorage.getItem('userID'));
+        //console.log(sessionStorage.getItem('username'));
+        //console.log(sessionStorage.getItem('credit'));
+      
+        
     </script>
 	<head>
 		<title>Phantom by HTML5 UP</title>
@@ -36,6 +96,69 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" href="assets/css/main.css" />
 		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+		 
+		 <style>
+	.modal-login {		
+		color: #636363;
+		width: 350px;
+		margin: 80px auto 0;
+	}
+	.modal-login .modal-content {
+		padding: 20px;
+		border-radius: 5px;
+		border: none;
+	}
+	.modal-login .modal-header {
+		border-bottom: none;   
+        position: relative;
+        justify-content: center;
+	}
+	.modal-login h4 {
+		text-align: center;
+		font-size: 20px;
+		margin: 30px 0 -15px;
+	}
+	.modal-login .form-control:focus {
+		border-color: #70c5c0;
+	}
+	.modal-login .form-control, .modal-login .btn {
+		min-height: 40px;
+		border-radius: 3px; 
+	}
+
+	}	
+	.modal-login .modal-footer {
+		background: #ecf0f1;
+		border-color: #dee4e7;
+		text-align: center;
+        justify-content: center;
+		margin: 0 -20px -20px;
+		border-radius: 5px;
+		font-size: 13px;
+	}
+	.modal-login .modal-footer a {
+		color: #999;
+	}		
+
+    .modal-login .btn {
+        color: #fff;
+        border-radius: 4px;
+		background: white;
+		text-decoration: none;
+		transition: all 0.4s;
+        line-height: normal;
+        border: none;
+    }
+	.modal-login .btn:hover, .modal-login .btn:focus {
+		background: white;
+		outline: none;
+	}
+	.trigger-btn {
+		display: inline-block;
+		margin: 10px auto;
+	} 
+		
+	</style>	
 	</head>
 	<body class="is-preload">
 		<!-- Wrapper -->
@@ -76,20 +199,69 @@
 					<div id="main">
 						<div class="inner">
 							<header>
-								<h1>This is Phantom, a free, fully responsive site<br />
+								<!--  <h1>This is Phantom, a free, fully responsive site<br />
 								template designed by <a href="http://html5up.net">HTML5 UP</a>.</h1>
 								<p>Etiam quis viverra lorem, in semper lorem. Sed nisl arcu euismod sit amet nisi euismod sed cursus arcu elementum ipsum arcu vivamus quis venenatis orci lorem ipsum et magna feugiat veroeros aliquam. Lorem ipsum dolor sit amet nullam dolore.</p>
+								-->
 								<form>
-        <label>First Name :</label>
-        <input type="text" id="fName">
-        <label>Last Name :</label>
-        <input type="text" id="lName">
-        <!-- set button onClick method to call function we defined passing input values as parameters -->
+								
+        <label for="uname"><b>Username</b></label> <input type="text"
+		placeholder="Enter Username" name="uname" id="loginUsername" required>
+
+		<label for="psw"><b>Password</b></label> <input type="password"
+		placeholder="Enter Password" name="psw" id="loginPassword" required>
+       
+		<button type="submit" onclick="checkLoginInfo()">Login</button>
+        <button href="#myModal" class="trigger-btn" data-toggle="modal">Register</button>
+        
+        
+		<a href="#">Forgot Password?</a>
+		
+        
+        <!-- set button onClick method to call function we defined passing input values as parameters 
         <button type="button" onclick="callAPI(document.getElementById('fName').value,document.getElementById('lName').value)">Call API</button>
-    </form>
+        -->
+						<!-- Modal HTML -->
+						<div id="myModal" class="modal fade">
+							<div class="modal-dialog modal-login">
+								<div class="modal-content">
+									<div class="modal-header">
+										<div class="avatar"></div>
+										<h4 class="modal-title">Register</h4>
+										<button type="button" class="close" data-dismiss="modal"
+											aria-hidden="true">&times;</button>
+									</div>
+									<div class="modal-body">
+										<form action="/examples/actions/confirmation.php"
+											method="post">
+											<div class="form-group">
+												<input type="text"
+		                                           placeholder="Enter Username" name="uname" id="RegisterUsername" required>
+											</div>
+											<div class="form-group">
+												<input type="email" class="form-control" name="email"
+													placeholder="Email" id = "email" required>
+											</div>
+											<div class="form-group">
+												<input type="password"
+		                                            placeholder="Enter Password" name="psw" id="RegisterPassword" required>
+											</div>
+											<div class="form-group">
+												<button type="submit"
+													class="btn btn-primary btn-lg btn-block login-btn onclick="checkRegisterInfo()">Create
+													Account</button>
+											</div>
+										</form>
+									</div>
+									
+								</div>
+							</div>
+						</div>
+
+					</form>
 								
 							</header>
-							<section class="tiles">
+							<!--  section class="tiles">
 								<article class="style1">
 									<span class="image">
 										<img src="images/pic01.jpg" alt="" />
@@ -221,7 +393,7 @@
 											<p>Sed nisl arcu euismod sit amet nisi lorem etiam dolor veroeros et feugiat.</p>
 										</div>
 									</a>
-								</article>
+								</article>-->
 							</section>
 						</div>
 					</div>
