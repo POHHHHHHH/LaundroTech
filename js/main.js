@@ -97,13 +97,50 @@ var sha256 = function sha256(ascii) {
 
 
 function login() {
-    var getUsername = document.getElementById("username").innerHTML;
-    var getPassword = document.getElementById("password").innerHTML;
-    var getWashingMachineID = document.getElementById("washingMachineID").innerHTML;
-    var shaPassword = sha256(getPassword).toUpperCase();
-    alert(shaPassword);
-    alert(getWashingMachineID);
-    alert(getUsername);
+
+	//Get username, Password from forms
+    var getUsername = document.getElementById("loginUsername").value;
+    var getPassword = document.getElementById("loginPassword");
+    var getWashingMachineID = document.getElementById("loginWashingMachineID").value;
+	var shaPassword = sha256(getPassword).toUpperCase();
+	alert(shaPassword);
+	// Check username, password in db
+	var myHeaders = new Headers(); 
+	myHeaders.append("Content-Type", "application/json");
+	var raw = JSON.stringify({"query":"SELECT * FROM laundrotech.User where username ='"+ getUsername +"' and password ='"+ shaPassword +"';"});
+	alert(raw);
+	console.log(raw);
+	var requestOptions = {
+		method: 'POST',
+		headers: myHeaders,
+	    body: raw,
+		redirect: 'follow'
+		};
+
+
+	fetch("https://3rczj928aa.execute-api.us-east-1.amazonaws.com/prod/login", requestOptions)
+	.then(response => response.text())
+	.then(result => {
+		alert("check1");
+        var data = JSON.parse(result);
+        if(data[0] == null){
+			console.log("Wrong Username and/or Password");
+			alert("Wrong Username and/or Password");
+		}
+		else if(data[0].role !== "admin"){
+			console.log("User is not a Admin.");
+			alert("User is not a Admin.");
+		}
+        else{
+			alert("You have Login as Admin.");
+			sessionStorage.setItem("userID", data[0].userID);
+			sessionStorage.setItem("username", data[0].username);
+			sessionStorage.setItem("fullName", data[0].fullName);
+			sessionStorage.setItem("washingMachineID", getWashingMachineID);
+			//window.location.href = "./bookingCode.html";
+		}
+	})
+	.catch(error => console.log('error', error));
 }
 
 
