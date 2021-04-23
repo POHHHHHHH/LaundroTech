@@ -16,7 +16,7 @@
 	src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
+<script src="js/sha.js"></script>
 <script>
         <!-- define the callAPI function that takes a first name and last name as parameters
         var callAPI = (firstName,lastName)=>{
@@ -59,7 +59,7 @@
                 redirect: 'follow'
         }
             
-          fetch("https://hlimcu55w5.execute-api.us-east-1.amazonaws.com/prod/login", requestOptions)
+          fetch("https://3rczj928aa.execute-api.us-east-1.amazonaws.com/prod/authlogin", requestOptions)
           .then(response => response.text())
           .then(result => alert(JSON.parse(result).body))
           var data = JSON.parse (result);
@@ -78,6 +78,42 @@
             }	
           
           .catch(error => console.log('error', error));
+          
+          function checkRegisterInfo(){
+          	var getUsername = document,getElementById("RegisterUsername").value;
+          	var myHeaders = new Headers(); 
+              myHeaders.append("Content-Type", "application/json");
+              var raw = JSON.stringify({
+              	"query" : "SELECT * FROM laundrotech.User WHERE '"+ username +"' = username";"                        
+              	});
+              console.log(raw);
+              var requestOptions = {
+                  method: 'POST',
+                  headers: myHeaders,
+                  body: raw,
+                  redirect: 'follow'
+          }
+              
+            fetch("https://3rczj928aa.execute-api.us-east-1.amazonaws.com/prod/register", requestOptions)
+            .then(response => response.text())
+            .then(result => alert(JSON.parse(result).body))
+            var data = JSON.parse (result);
+              if data[0] == null){
+              	console.log("Username has already been taken");
+              	alert("Username has already been taken")
+              }
+              else {
+              	console.log("You have created an account with LaundroTech");
+              	alert("You have created an account with LaundroTech")
+              	
+              	sessionStorage.setItem("userID", "RegisterUsername");
+          	    sessionStorage.setItem("username", "Registerpassword");
+          	    sessionStorage.setItem("credit", "0");
+          	    //window.location.href = "./.html";
+              	
+              }	
+            
+            .catch(error => console.log('error', error));
          
 	    //const obj = {userID : '1', username : 'Bob', credit : '0'};
         
@@ -240,7 +276,7 @@
 											</div>
 											<div class="form-group">
 												<input type="email" class="form-control" name="email"
-													placeholder="Email" id = "email" required>
+													placeholder="Email" id = "RegisterEmail" required>
 											</div>
 											<div class="form-group">
 												<input type="password"
