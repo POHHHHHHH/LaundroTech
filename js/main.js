@@ -97,19 +97,18 @@ var sha256 = function sha256(ascii) {
 
 
 function login() {
-
+	event.preventDefault();
 	//Get username, Password from forms
     var getUsername = document.getElementById("loginUsername").value;
-    var getPassword = document.getElementById("loginPassword");
+    var getPassword = document.getElementById("loginPassword").value;
     var getWashingMachineID = document.getElementById("loginWashingMachineID").value;
-	var shaPassword = sha256(getPassword).toUpperCase();
-	alert(shaPassword);
+	var shaPassword = sha256(getPassword);
 	// Check username, password in db
 	var myHeaders = new Headers(); 
 	myHeaders.append("Content-Type", "application/json");
 	var raw = JSON.stringify({"query":"SELECT * FROM laundrotech.User where username ='"+ getUsername +"' and password ='"+ shaPassword +"';"});
-	alert(raw);
 	console.log(raw);
+	
 	var requestOptions = {
 		method: 'POST',
 		headers: myHeaders,
@@ -121,7 +120,6 @@ function login() {
 	fetch("https://3rczj928aa.execute-api.us-east-1.amazonaws.com/prod/login", requestOptions)
 	.then(response => response.text())
 	.then(result => {
-		alert("check1");
         var data = JSON.parse(result);
         if(data[0] == null){
 			console.log("Wrong Username and/or Password");
@@ -132,30 +130,166 @@ function login() {
 			alert("User is not a Admin.");
 		}
         else{
-			alert("You have Login as Admin.");
+			console.log("You have Login as Admin.");
 			sessionStorage.setItem("userID", data[0].userID);
 			sessionStorage.setItem("username", data[0].username);
 			sessionStorage.setItem("fullName", data[0].fullName);
 			sessionStorage.setItem("washingMachineID", getWashingMachineID);
-			//window.location.href = "./bookingCode.html";
+			window.location.href = "./bookingCode.html";
 		}
 	})
 	.catch(error => console.log('error', error));
 }
 
 
+function logout() {
+	event.preventDefault();
+	//Get username, Password from forms
+    var getUsername = document.getElementById("logoutUsername").value;
+    var getPassword = document.getElementById("logoutPassword").value;
+	var shaPassword = sha256(getPassword);
+	// Check username, password in db
+	var myHeaders = new Headers(); 
+	myHeaders.append("Content-Type", "application/json");
+	var raw = JSON.stringify({"query":"SELECT * FROM laundrotech.User where username ='"+ getUsername +"' and password ='"+ shaPassword +"';"});
+	console.log(raw);
+	
+	var requestOptions = {
+		method: 'POST',
+		headers: myHeaders,
+	    body: raw,
+		redirect: 'follow'
+		};
 
 
+	fetch("https://3rczj928aa.execute-api.us-east-1.amazonaws.com/prod/login", requestOptions)
+	.then(response => response.text())
+	.then(result => {
+        var data = JSON.parse(result);
+        if(data[0] == null){
+			console.log("Wrong Username and/or Password");
+			alert("Wrong Username and/or Password");
+		}
+		else if(data[0].role !== "admin"){
+			console.log("User is not a Admin.");
+			alert("User is not a Admin.");
+		}
+        else{
+			console.log("You have Logout as Admin.");
+			sessionStorage.clear();
+			window.location.href = "./index.html";
+		}
+	})
+	.catch(error => console.log('error', error));
+}
+
+function verifyBookingCode() {
+	event.preventDefault();
+
+	//Get user input - Booking Code
+	var getBookingCode = document.getElementById("bookingCode").value;
+	var getWashingMachineID = sessionStorage.getItem("washingMachineID");
+
+	
+	// Get time slot
+	var timeslot = getTimeslot();
+
+	// Get today date
+	var today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var yyyy = today.getFullYear();
+    today = dd + '/' + mm + '/' + yyyy;
+            
+	// Get Status
+	var bookingStatus = "active"
+
+	//Search Booking Code
+	var myHeaders = new Headers(); 
+	myHeaders.append("Content-Type", "application/json");
+	var raw = JSON.stringify({"query":"SELECT * FROM laundrotech.Booking, laundrotech.User where FK_userID = userID and FK_washingMachineID = '"+ getWashingMachineID +"' and bookingDate = '"+ today +"' and FK_timeslotID= '"+ timeslot +"' and bookingCode = '"+ getBookingCode +"' and bookingStatus = '"+ bookingStatus +"';"});
+	console.log(raw);
+	
+	var requestOptions = {
+		method: 'POST',
+		headers: myHeaders,
+	    body: raw,
+		redirect: 'follow'
+		};
 
 
+	fetch("https://3rczj928aa.execute-api.us-east-1.amazonaws.com/prod/getbooking", requestOptions)
+	.then(response => response.text())
+	.then(result => {
+        var data = JSON.parse(result);
+        if(data[0] == null){
+			console.log("Booking code is invalid.");
+			alert("Booking code is invalid.");
+		}
+        else{
+			console.log("Booking code is valid.");
+			sessionStorage.setItem("fullName", data[0].fullName);
+			sessionStorage.setItem("bookingID", data[0].bookingID);
+			sessionStorage.setItem("bookingDate", data[0].bookingDate);
+			sessionStorage.setItem("startTime", data[0].startTime);
+			sessionStorage.setItem("endTime", data[0].endTime);
+			window.location.href = "./bookingDetails.html";
+		}
+	})
+	.catch(error => console.log('error', error));
+
+}
+
+function displayBookingDetails(){
+	//Get from session storage
+	var fullName = sessionStorage.getItem("fullName");
+	var washingMachineID = sessionStorage.getItem("washingMachineID");
+	var bookingID = sessionStorage.getItem("bookingID");
+	var bookingDate = sessionStorage.getItem("bookingDate");
+	var startTime = sessionStorage.getItem("startTime");
+	var endTime = sessionStorage.getItem("endTime");
+
+	//Display booking details
+	document.getElementById("name").innerHTML= "Dear"+ fullName +", Thank you for using our services.";
+	document.getElementById("washingMachineID").innerHTML= washingMachineID;
+	document.getElementById("bookingID").innerHTML= bookingID;
+	document.getElementById("date").innerHTML= bookingDate;
+	document.getElementById("start").innerHTML= startTime;
+	document.getElementById("end").innerHTML= endTime;
+}
+
+function updateBookingStatus() {
+	event.preventDefault();
+	var bookingID = sessionStorage.getItem("bookingID");
+	var completedStatus = "completed";
+	var myHeaders = new Headers(); 
+	myHeaders.append("Content-Type", "application/json");
+	var raw = JSON.stringify({"query":"UPDATE `laundrotech`.`Booking` SET `bookingStatus`='"+ completedStatus +"' WHERE `bookingID`='"+ bookingID+"';"});
+	console.log(raw);
+	var requestOptions = {
+		method: 'POST',
+		headers: myHeaders,
+	    body: raw,
+		redirect: 'follow'
+		};
+
+	var str = "";
+	fetch("https://3rczj928aa.execute-api.us-east-1.amazonaws.com/prod/getbooking", requestOptions)
+	.then(response => response.text())
+	.then(result => {
+		var data = JSON.parse(result);
+		console.log("Updated Booking status");
+        window.location.href = "./bookingCode.html";
+	})
+	.catch(error => console.log('error', error));
+}
 
 
-
-
-
-
-
-
-
-
+function getTimeslot(){
+	//Get time slot
+	var now = new Date();
+	var nowHour = now.getHours();
+	var timeslot = nowHour +1;
+	return timeslot;
+}
 

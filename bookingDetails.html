@@ -21,7 +21,7 @@
 	<link rel="stylesheet" type="text/css" href="css/main.css">
 <!--===============================================================================================-->
 </head>
-<body>
+<body onload="displayBookingDetails()">
 	
 	<div class="limiter">
 		<div class="container-login100">
@@ -30,7 +30,7 @@
 						<h3>LaundroTech</h3>
 				</div>
 				<div class="wrap-input100">
-					<h5>Hi Mr Vi Jian, Thank you for using our services.</h5>
+					<h5 id="name"></h5>
 				</div>
 				<br>
 				<br>
@@ -42,29 +42,29 @@
 						</tr>
 						<tr>
 							<td class="column1">Washing Machine Id:</td>
-							<td class="column2">1</td>
+							<td class="column2" id="washingMachineID"></td>
 						</tr>
 						<tr>
 							<td class="column1">Booking Id:</td>
-							<td class="column2">1</td>
+							<td class="column2" id="bookingID"></td>
 						</tr>
 						<tr>
 							<td class="column1">Date:</td>
-							<td class="column2">18/04/2021</td>
+							<td class="column2" id="date"></td>
 						</tr>
 						<tr>
 							<td class="column1">Start:</td>
-							<td class="column2">01:00</td>
+							<td class="column2" id="start"></td>
 						</tr>
 						<tr>
 							<td class="column1">End:</td>
-							<td class="column2">02:00</td>
+							<td class="column2" id="end"></td>
 						</tr>
 					</table>
 				</div>
 
 				<div class="complete-btn">
-					<button class="complete-form-btn">
+					<button class="complete-form-btn" onclick="updateBookingStatus()">
 						Washing Machine Completed
 					</button>
 				</div>
