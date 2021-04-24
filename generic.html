@@ -70,7 +70,12 @@
 				var myHeaders = new Headers(); 
 				myHeaders.append("Content-Type", "application/json");
 
-				var raw = JSON.stringify({"query":"SELECT ts.bookingTime FROM (SELECT t.bookingTime, w.washingMachineID FROM laundrotech.Booking AS b, laundrotech.WashingMachine AS w, laundrotech.Timeslot AS t WHERE b.FK_washingMachineID = w.washingMachineID AND w.location= 'pioneer' AND b.FK_timeslotID <> t.timeslotID AND b.bookingDate = '" + selectedDate + "' UNION SELECT t.bookingTime, w.washingMachineID FROM laundrotech.Booking AS b, laundrotech.WashingMachine AS w, laundrotech.Timeslot AS t WHERE (w.washingMachineID NOT IN (SELECT bk.FK_washingMachineID FROM laundrotech.Booking AS bk WHERE bk.bookingDate = '" + selectedDate + "')) AND w.location= 'pioneer') AS ts GROUP BY ts.bookingTime"});
+				var raw = JSON.stringify({"query":"SELECT ts.bookingTime FROM (SELECT t.bookingTime, w.washingMachineID FROM laundrotech.Booking AS b, laundrotech.WashingMachine AS w, laundrotech.Timeslot AS t " + 
+					"WHERE b.FK_washingMachineID = w.washingMachineID AND w.location= 'pioneer' AND b.FK_timeslotID <> t.timeslotID AND b.bookingDate = '" + selectedDate + "' " + 
+					"UNION " + 
+					"SELECT t.bookingTime, w.washingMachineID FROM laundrotech.Booking AS b, laundrotech.WashingMachine AS w, laundrotech.Timeslot AS t " + 
+					"WHERE (w.washingMachineID NOT IN (SELECT bk.FK_washingMachineID FROM laundrotech.Booking AS bk WHERE bk.bookingDate = '" + selectedDate +"')) AND w.location= 'pioneer') AS ts " + 
+					"GROUP BY ts.bookingTime"});
 				console.log(raw);
 				var requestOptions = {
 					method: 'POST',
@@ -83,7 +88,7 @@
 				fetch("https://3rczj928aa.execute-api.us-east-1.amazonaws.com/prod/gettimeslot", requestOptions)
 				.then(response => response.text())
 				.then(result => {
-					// var data = JSON.parse(result);
+					 var data = JSON.parse(result);
 					// // console.log("before if" + data.length);
 					// if(data[0] == null){
 					// 	console.log("null")
@@ -92,13 +97,134 @@
 					// }
 					// else{
 						console.log("else");
+						str += "<option value='chooseTimeslot' selected disabled hidden>Choose a Timeslot</option>";
 						for (var i = 0; i < data.length; i++) {
 						str += "<option>" + data[i].bookingTime + "</option>"
 					}
 					document.getElementById("bookingTime").innerHTML = str;
+					var selectElement = document.getElementById("availWMTable");
+					selectElement.style.display = "none";
 					// }
 				})
 				.catch(error => console.log('error', error));
+			}
+
+			function displayTable(){
+				var date = new Date(document.getElementById("bookingDate").value);
+				var day = date.getDate();
+				if(day < 10){
+					day = "0" + day;
+				}
+				var month = date.getMonth()+1;
+				if(month < 10){
+					month = "0"+ month;
+				}
+				var year = date.getFullYear();
+
+				var selectedDate = day + "/" + month + "/" + year;
+				var timeslot = document.getElementById("bookingTime").value;
+
+				var myHeaders = new Headers(); 
+				myHeaders.append("Content-Type", "application/json");
+
+				var raw = JSON.stringify({"query":"SELECT wm.washingMachineID, wm.washingMachineBrand, wm.washingMachineModel, wm.price, wm.washingMachineAddress FROM " + 
+								"(SELECT t.bookingTime, w.washingMachineID, w.washingMachineBrand, w.washingMachineModel, w.price, w.washingMachineAddress FROM laundrotech.Booking AS b, laundrotech.WashingMachine AS w, laundrotech.Timeslot AS t " + 
+								"WHERE b.FK_washingMachineID = w.washingMachineID AND w.location= 'pioneer' AND b.FK_timeslotID <> t.timeslotID AND b.bookingDate = '" + selectedDate + "' " + 
+								"UNION " + 
+								"SELECT t.bookingTime, w.washingMachineID, w.washingMachineBrand, w.washingMachineModel, w.price, w.washingMachineAddress FROM laundrotech.Booking AS b, laundrotech.WashingMachine AS w, laundrotech.Timeslot AS t " + 
+								"WHERE (w.washingMachineID NOT IN (SELECT bk.FK_washingMachineID FROM laundrotech.Booking AS bk WHERE bk.bookingDate = '" + selectedDate + "')) AND w.location= 'pioneer') AS wm " + 
+								"WHERE wm.bookingTime = '" + timeslot + "' GROUP BY wm.washingMachineID"});
+				console.log(raw);
+				var requestOptions = {
+					method: 'POST',
+					headers: myHeaders,
+					body: raw,
+					redirect: 'follow'
+				};
+
+				var str = "";
+				str += '<table class = "availWM">' + 
+                        '<thead>' + 
+							'<tr>' +
+                            '<th><strong>Washing Machine No.</strong></th>' +
+                            '<th><strong>Washing Machine Brand</strong></th>' +
+                            '<th><strong>Washing Machine Model</strong></th>' +
+							'<th><strong>Price</strong></th>' +
+							'<th><strong>Address</strong></th>' +
+							'</tr>' +
+                        '</thead>' +
+						'<tbody">';
+
+
+				fetch("https://3rczj928aa.execute-api.us-east-1.amazonaws.com/prod/getavailwm", requestOptions)
+				.then(response => response.text())
+				.then(result => {
+					 var data = JSON.parse(result);
+					 
+						for (var i = 0; i < data.length; i++) {
+						str += "<tr onclick=storeWMDetails(this);>" +  
+							"<td>" + data[i].washingMachineID + "</td>" + 
+							"<td>" + data[i].washingMachineBrand + "</td>" +
+							"<td>" + data[i].washingMachineModel + "</td>" +
+							"<td>" + data[i].price + "</td>" +
+							"<td>" + data[i].washingMachineAddress + "</td>" +
+							"</a>" + "</tr>"
+					}
+
+					str += "</tbody>" + "</tables>";
+					document.getElementById("availWMTable").innerHTML = str;
+					var selectElement = document.getElementById("availWMTable");
+					selectElement.style.display = "block";
+				})
+				.catch(error => console.log('error', error));
+			}
+
+			function storeWMDetails(row){
+				var date = new Date(document.getElementById("bookingDate").value);
+				var day = date.getDate();
+				if(day < 10){
+					day = "0" + day;
+				}
+				var month = date.getMonth()+1;
+				if(month < 10){
+					month = "0"+ month;
+				}
+				var year = date.getFullYear();
+
+				var selectedDate = day + "/" + month + "/" + year;
+				var timeslot = document.getElementById("bookingTime").value;
+
+				sessionStorage.setItem('userID', '1');
+				sessionStorage.setItem("location", "pioneer");
+				sessionStorage.setItem("washingMachineID", row.cells[0].innerHTML);
+				sessionStorage.setItem("price", row.cells[3].innerHTML);
+				sessionStorage.setItem("washingMachineAddres", row.cells[4].innerHTML);
+				sessionStorage.setItem("bookingDate", selectedDate);
+				sessionStorage.setItem("bookingTime", timeslot);
+
+				var myHeaders = new Headers(); 
+				myHeaders.append("Content-Type", "application/json");
+				
+				var raw = JSON.stringify({"query":"SELECT timeslotID FROM laundrotech.Timeslot WHERE bookingTime = '" + timeslot + "'"});
+				console.log(raw);
+				var requestOptions = {
+					method: 'POST',
+					headers: myHeaders,
+					body: raw,
+					redirect: 'follow'
+				};
+
+				fetch("https://3rczj928aa.execute-api.us-east-1.amazonaws.com/prod/gettimeslot", requestOptions)
+				.then(response => response.text())
+				.then(result => {
+					 var data = JSON.parse(result);
+					 alert(data[0].timeslotID);
+					sessionStorage.setItem("timeslotID", data[0].timeslotID);
+					window.location.replace("index.html");
+				})
+				.catch(error => console.log('error', error));
+				
+				
 			}
 		</script>
 	</head>
@@ -149,35 +275,11 @@
 							
 							<!-- <input type="text" id="bookingDate" name="bookingDate" value="Pick a Date" readonly>-->
 							<input name="bookingDate" type="date" id="bookingDate" value="Pick a Date" onload="selectDate()" onchange="changeTimeslot()">
-								<select name= "bookingTime" id= "bookingTime">
+								<select name= "bookingTime" id= "bookingTime" ="displayTable()" onchange="displayTable()">
 									<option value="chooseTimeslot" selected disabled hidden>Choose a Timeslot</option>
-									<option value="0000">0000</option>
-									<option value="0100">0100</option>
-									<option value="0200">0200</option>
-									<option value="0300">0300</option>
-									<option value="0400">0400</option>
-									<option value="0500">0500</option>
-									<option value="0600">0600</option>
-									<option value="0700">0700</option>
-									<option value="0800">0800</option>
-									<option value="0900">0900</option>
-									<option value="1000">1000</option>
-									<option value="1100">1100</option>
-									<option value="1200">1200</option>
-									<option value="1300">1300</option>
-									<option value="1400">1400</option>
-									<option value="1500">1500</option>
-									<option value="1600">1600</option>
-									<option value="1700">1700</option>
-									<option value="1800">1800</option>
-									<option value="1900">1900</option>
-									<option value="2000">2000</option>
-									<option value="2100">2100</option>
-									<option value="2200">2200</option>
-									<option value="2300">2300</option>
 								</select>
-						
-							<br><br><br><br><br><br><br><br>
+								
+							<div id = 'availWMTable'></div>
 						
 							<!-- <span class="image main"><img src="images/pic13.jpg" alt="" /></span>
 							<p>Donec eget ex magna. Interdum et malesuada fames ac ante ipsum primis in faucibus. Pellentesque venenatis dolor imperdiet dolor mattis sagittis. Praesent rutrum sem diam, vitae egestas enim auctor sit amet. Pellentesque leo mauris, consectetur id ipsum sit amet, fergiat. Pellentesque in mi eu massa lacinia malesuada et a elit. Donec urna ex, lacinia in purus ac, pretium pulvinar mauris. Curabitur sapien risus, commodo eget turpis at, elementum convallis elit. Pellentesque enim turpis, hendrerit tristique.</p>

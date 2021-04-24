@@ -3330,21 +3330,23 @@ input, select, textarea {
 		}
 
 
-	/* #bookingDate{
+	 #bookingDate{
 		width: 400px;
-		float: left;
-		position: absolute;
-		left: 30%;
-		/* columns: 50%; }*/
+		margin-top: 150px;
+		margin-left: 150px;
+		margin-bottom: 200px;
+	}
 	
 
 	#bookingTime{
 		width: 400px;
-		/* columns: 50%; */
-		float: left;
-		position: absolute;
-		left: 55%;
+		margin-left: 200px;
+		margin-bottom: 200px;
+		display: inline;
+	}
 
+	.availWM tbody tr:hover  {
+		background-color: lavenderblush;
 	}
 
 	/* div.ui-datepicker{

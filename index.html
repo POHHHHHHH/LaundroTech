@@ -5,32 +5,6 @@
 	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
 -->
 <html>
-	    <script>
-        // define the callAPI function that takes a first name and last name as parameters
-        var callAPI = (firstName,lastName)=>{
-            // instantiate a headers object
-            var myHeaders = new Headers(); 
-            // add content type header to object
-            myHeaders.append("Content-Type", "application/json");
-            // using built in JSON utility package turn object to string and store in a variable
-			//var raw = JSON.stringify({"firstName":firstName,"lastName":lastName});
-            var raw = JSON.stringify({"query":"SELECT ts.bookingTime FROM (SELECT t.bookingTime, w.washingMachineID FROM laundrotech.Booking AS b, laundrotech.WashingMachine AS w, laundrotech.Timeslot AS t WHERE b.FK_washingMachineID = w.washingMachineID AND w.location= 'pioneer' AND b.FK_timeslotID <> t.timeslotID AND b.bookingDate = '19/04/2021' UNION SELECT t.bookingTime, w.washingMachineID FROM laundrotech.Booking AS b, laundrotech.WashingMachine AS w, laundrotech.Timeslot AS t WHERE (w.washingMachineID NOT IN (SELECT bk.FK_washingMachineID FROM laundrotech.Booking AS bk)) AND w.location= 'pioneer' AND b.FK_timeslotID <> t.timeslotID AND b.bookingDate = '19/04/2021') AS ts GROUP BY ts.bookingTime"});
-            // create a JSON object with parameters for API call and store in a variable
-            var requestOptions = {
-                method: 'POST',
-                headers: myHeaders,
-                body: raw,
-                redirect: 'follow'
-            };
-		
-		
-            // make API call with parameters and use promises to get response
-            fetch("https://3rczj928aa.execute-api.us-east-1.amazonaws.com/prod/gettimeslot", requestOptions)
-            .then(response => response.text())
-            .then(result => alert(result))
-            .catch(error => console.log('error', error));
-        }
-    </script>
 	<head>
 		<title>Phantom by HTML5 UP</title>
 		<meta charset="utf-8" />
@@ -80,15 +54,7 @@
 								<h1>This is Phantom, a free, fully responsive site<br />
 								template designed by <a href="http://html5up.net">HTML5 UP</a>.</h1>
 								<p>Etiam quis viverra lorem, in semper lorem. Sed nisl arcu euismod sit amet nisi euismod sed cursus arcu elementum ipsum arcu vivamus quis venenatis orci lorem ipsum et magna feugiat veroeros aliquam. Lorem ipsum dolor sit amet nullam dolore.</p>
-								<form>
-        <label>First Name :</label>
-        <input type="text" id="fName">
-        <label>Last Name :</label>
-        <input type="text" id="lName">
-        <!-- set button onClick method to call function we defined passing input values as parameters -->
-        <button type="button" onclick="callAPI(document.getElementById('fName').value,document.getElementById('lName').value)">Call API</button>
-    </form>
-								
+								<!-- <button type="button" onclick="callAPI(document.getElementById('fName').value,document.getElementById('lName').value)">Call API</button> -->
 							</header>
 							<section class="tiles">
 								<article class="style1">
@@ -276,6 +242,5 @@
 			<script src="assets/js/breakpoints.min.js"></script>
 			<script src="assets/js/util.js"></script>
 			<script src="assets/js/main.js"></script>
-
 	</body>
 </html>
