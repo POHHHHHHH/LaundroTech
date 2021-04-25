@@ -3329,27 +3329,3 @@ input, select, textarea {
 
 		}
 
-
-	 #bookingDate{
-		width: 400px;
-		margin-top: 150px;
-		margin-left: 150px;
-		margin-bottom: 200px;
-	}
-	
-
-	#bookingTime{
-		width: 400px;
-		margin-left: 200px;
-		margin-bottom: 200px;
-		display: inline;
-	}
-
-	.availWM tbody tr:hover  {
-		background-color: lavenderblush;
-	}
-
-	/* div.ui-datepicker{
-		width: 400px;
-	}
-	 */

@@ -1,0 +1,55 @@
+.reviewBooking {
+    display: flex;
+    flex-wrap: nowrap;
+    margin-bottom: 0px;
+    padding-bottom: 0px;
+}
+
+.reviewBooking label{
+    width: 250px;
+    display: inline-block;
+}
+
+.reviewBooking input{
+    width: 200px;
+}
+
+.reviewLabel{
+    font-size: 20px;
+    padding-left: 10px;
+}
+
+.reviewValues{
+
+    font-weight: normal !important;
+    font-size: 20px;
+    margin-bottom: 0px;
+}
+
+.reviewButton{
+    float: right;
+}
+
+.reviewButton input{
+    float: left;
+    margin-left: 5px;
+    padding-bottom: 5px;
+}
+
+#field_set {
+    border: 5px solid lightgrey;
+}
+
+#fieldset_legend {
+    border: 5px solid lightgrey;
+    padding-left: 5px;
+    padding-right: 5px;
+    margin-left: 10px;
+}
+
+#insufficientCredits {
+    display: none;
+    color: rgb(238, 62, 62);
+    float: right;
+    margin-right: 10px;
+}
