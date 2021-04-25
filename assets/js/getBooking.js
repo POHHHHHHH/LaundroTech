@@ -1,7 +1,7 @@
 function getActiveBooking() {
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
-    var raw = JSON.stringify({"query": "SELECT bookingID,startTime,endTime FROM laundrotech.Booking where bookingStatus='active' and FK_userID = 2 ;"});
+    var raw = JSON.stringify({"query": "SELECT bookingID,bookingDate,startTime,endTime, bookingCode FROM laundrotech.Booking where bookingStatus='active' and FK_userID = 2 ;"});
     console.log(raw);
     var requestOptions = {
         method: 'POST',
@@ -21,10 +21,10 @@ function getActiveBooking() {
             } else {
                 console.log("else");
 
-                str += "<table style=\"width:100%\"> <tr><th>Booking ID</th><th>Start Time</th><th>End Time</th><th>Cancel Booking</th></tr>"
+                str += "<table style=\"width:100%\"> <tr><th>Booking ID</th><th>Booking Date</th><th>Start Time</th><th>End Time</th><th>Booking Code</th><th>Cancel Booking</th></tr>"
                 for (var i = 0; i < data.length; i++) {
                     count = i + 1;
-                    str += "<tr><th>"+ data[i].bookingID + "</th><th>" + data[i].startTime + "</th><th>"+ data[i].endTime + "</th><th><article class='style"+ "'>" + "</span>" + "<button onclick='callMethod(" + data[i].bookingID + ")'>DELETE</button></th></tr>"
+                    str += "<tr><th>"+ data[i].bookingID + "</th></th><th>"+ data[i].bookingDate + "</th><th>" + data[i].startTime + "</th><th>"+ data[i].endTime + "</th><th>"+ data[i].bookingCode + "</><th><article class='style"+ "'>" + "</span>" + "<button onclick='callMethod(" + data[i].bookingID + ")'>DELETE</button></th></tr>"
                 }
                 str+="</table>"
                 document.getElementById("locationTile").innerHTML = str;
@@ -39,7 +39,7 @@ function getActiveBooking() {
 function getCompletedBooking() {
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
-    var raw = JSON.stringify({"query": "SELECT bookingID,startTime,endTime FROM laundrotech.Booking where bookingStatus in ('completed','canceled') and FK_userID = 2 ;"});
+    var raw = JSON.stringify({"query": "SELECT bookingID,bookingDate,startTime,endTime, bookingCode FROM laundrotech.Booking where bookingStatus in ('completed','canceled') and FK_userID = 2 ;"});
     console.log(raw);
     var requestOptions = {
         method: 'POST',
@@ -59,10 +59,10 @@ function getCompletedBooking() {
             } else {
                 console.log("else");
 
-                str += "<table style=\"width:100%\"> <tr><th>Booking ID</th><th>Start Time</th><th>End Time</th><th>Cancel Booking</th></tr>"
+                str += "<table style=\"width:100%\"> <tr><th>Booking ID</th><th>Booking Date</th><th>Start Time</th><th>End Time</th><th>Booking Code</th></tr>"
                 for (var i = 0; i < data.length; i++) {
                     count = i + 1;
-                    str += "<tr><th>"+ data[i].bookingID + "</th><th>" + data[i].startTime + "</th><th>"+ data[i].endTime + "</th><th><article class='style"+ "'>" + "</span>" + "<button onclick='callMethod(" + data[i].bookingID + ")'>DELETE</button></th></tr>"
+                    str += "<tr><th>"+ data[i].bookingID + "</th><th>"+ data[i].bookingDate + "</th><th>" + data[i].startTime + "</th><th>"+ data[i].endTime + "</th><th>"+ data[i].bookingCode + "</th></tr>"
                 }
                 str+="</table>"
                 document.getElementById("locationTile2").innerHTML = str;
