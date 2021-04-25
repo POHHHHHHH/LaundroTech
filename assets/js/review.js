@@ -122,22 +122,19 @@ function checkout(){
                 body: raw,
                 redirect: 'follow'
             };
-
-            alert(raw);
             return fetch("https://3rczj928aa.execute-api.us-east-1.amazonaws.com/prod/reviewbooking", requestOptions)
         })
         .then(response => response.text())
         .then(result => {
             raw = JSON.stringify({"query":"UPDATE laundrotech.User SET credit = " + (sessionStorage.getItem("credit") - parseInt(sessionStorage.getItem("total"))) + " WHERE userID = " + sessionStorage.getItem("userID") + ";"});
 
+            sessionStorage.setItem("credit", (sessionStorage.getItem("credit") - parseInt(sessionStorage.getItem("total"))));
             requestOptions = {
                 method: 'POST',
                 headers: myHeaders,
                 body: raw,
                 redirect: 'follow'
             };
-
-            alert(raw);
             return fetch("https://3rczj928aa.execute-api.us-east-1.amazonaws.com/prod/reviewbooking", requestOptions)
         })
         .then(response => response.text())
