@@ -43,14 +43,17 @@
         -->
         
         function checkLoginInfo(){
-        	var getUsername = document,getElementById("loginUsername").value;
-        	var getPassword = document,getElementById("loginPassword");
+        	var getUsername = document.getElementById("loginUsername").value;
+        	var getPassword = document.getElementById("loginPassword");
+        	alert(getUsername);
         	var shaPassword = shaPassword(getPassword).toUpperCase();
+        	alert(shaPassword);
         	var myHeaders = new Headers(); 
             myHeaders.append("Content-Type", "application/json");
             var raw = JSON.stringify({
-            	"query" : "SELECT * FROM laundrotech.User WHERE '"+ username +"' = username" and password = '"+ shaPassword +"';"                        
+            	"query" : "SELECT * FROM laundrotech.User WHERE '"+ username +"' = username and password = '"+ shaPassword +"';"
             	});
+            
             console.log(raw);
             var requestOptions = {
                 method: 'POST',
@@ -59,33 +62,33 @@
                 redirect: 'follow'
         }
             
-          fetch("https://3rczj928aa.execute-api.us-east-1.amazonaws.com/prod/authlogin", requestOptions)
-          .then(response => response.text())
-          .then(result => alert(JSON.parse(result).body))
-          var data = JSON.parse (result);
-            if data[0] == null){
-            	console.log("Wrong Username/Password");
-            	alert("Wrong Username/Password")
-            }
-            else {
-            	console.log("You have logged into LaundroTech");
-            	alert("You have logged into LaundroTech")
-            	sessionStorage.setItem("userID", data[0].userID);
-        	    sessionStorage.setItem("username", data[0].username);
-        	    sessionStorage.setItem("credit", "0");
-        	    //window.location.href = "./.html";
-            	
-            }	
-          
-          .catch(error => console.log('error', error));
+            fetch("https://3rczj928aa.execute-api.us-east-1.amazonaws.com/prod/login", requestOptions)
+        	.then(response => response.text())
+        	.then(result => {
+        		alert("check1");
+                var data = JSON.parse(result);
+                if(data[0] == null){
+        			console.log("Wrong Username and/or Password");
+        			alert("Wrong Username and/or Password");
+        		}
+                else{
+                	console.log("You have logged into LaundroTech");
+                	alert("You have logged into LaundroTech");
+        			sessionStorage.setItem("userID", data[0].userID);
+        			sessionStorage.setItem("username", data[0].username);
+        			sessionStorage.setItem("credit", "0");
+        			//window.location.href = "./bookingCode.html";
+        		}
+        	})
+        	.catch(error => console.log('error', error));
         }
           
           function checkRegisterInfo(){
-          	var getUsername = document,getElementById("RegisterUsername").value;
+          	var getUsername = document.getElementById("RegisterUsername").value;
           	var myHeaders = new Headers(); 
               myHeaders.append("Content-Type", "application/json");
               var raw = JSON.stringify({
-              	"query" : "SELECT * FROM laundrotech.User WHERE '"+ username +"' = username";"                        
+              	"query" : "SELECT * FROM laundrotech.User WHERE '"+ username +"' = username;"                        
               	});
               console.log(raw);
               var requestOptions = {
@@ -95,26 +98,26 @@
                   redirect: 'follow'
           }
               
-            fetch("https://3rczj928aa.execute-api.us-east-1.amazonaws.com/prod/register", requestOptions)
-            .then(response => response.text())
-            .then(result => alert(JSON.parse(result).body))
-            var data = JSON.parse (result);
-              if data[0] == null){
-              	console.log("Username has already been taken");
-              	alert("Username has already been taken")
-              }
-              else {
-              	console.log("You have created an account with LaundroTech");
-              	alert("You have created an account with LaundroTech")
-              	
-              	sessionStorage.setItem("userID", "RegisterUsername");
-          	    sessionStorage.setItem("username", "Registerpassword");
-          	    sessionStorage.setItem("credit", "0");
-          	    //window.location.href = "./.html";
-              	
-              }	
-            
-            .catch(error => console.log('error', error));
+              fetch("https://3rczj928aa.execute-api.us-east-1.amazonaws.com/prod/login", requestOptions)
+          	.then(response => response.text())
+          	.then(result => {
+          		alert("check1");
+                  var data = JSON.parse(result);
+                  if(data[0] == null){
+          			console.log("Wrong Username and/or Password");
+          			alert("Wrong Username and/or Password");
+          		}
+                  else {
+                    	console.log("You have created an account with LaundroTech");
+                    	alert("You have created an account with LaundroTech")
+                    	
+                    	sessionStorage.setItem("userID", "RegisterUsername");
+                	    sessionStorage.setItem("username", "Registerpassword");
+                	    sessionStorage.setItem("credit", "0");
+                	    //window.location.href = "./.html";
+          		}
+          	})
+          	.catch(error => console.log('error', error));
           }
          
 	    //const obj = {userID : '1', username : 'Bob', credit : '0'};
