@@ -138,7 +138,34 @@ function checkout(){
             return fetch("https://3rczj928aa.execute-api.us-east-1.amazonaws.com/prod/reviewbooking", requestOptions)
         })
         .then(response => response.text())
-        .then(result => window.location.replace("index.html"))
+        .then(result => {
+            raw = JSON.stringify({"query":"SELECT bookingID FROM laundrotech.Booking WHERE FK_washingMachineID = '" + sessionStorage.getItem("washingMachineID") + 
+                            "' AND bookingDate = '" + sessionStorage.getItem("bookingDate") + "' AND FK_timeslotID = '" + sessionStorage.getItem("timeslotID") + "'"});
+
+            requestOptions = {
+                method: 'POST',
+                headers: myHeaders,
+                body: raw,
+                redirect: 'follow'
+            };
+            return fetch("https://3rczj928aa.execute-api.us-east-1.amazonaws.com/prod/reviewbooking", requestOptions)
+        })
+        .then(response => response.text())
+        .then(result => {
+            var data = JSON.parse(result);
+            raw = JSON.stringify({"query":"INSERT INTO laundrotech.Payment (FK_userID, FK_bookingID, price, status) VALUES ('" + sessionStorage.getItem("userID") + "','" + data[0].bookingID + "','" 
+                            + sessionStorage.getItem("total") + "','completed')" });
+            alert(raw);
+            requestOptions = {
+                method: 'POST',
+                headers: myHeaders,
+                body: raw,
+                redirect: 'follow'
+            };
+            return fetch("https://3rczj928aa.execute-api.us-east-1.amazonaws.com/prod/reviewbooking", requestOptions)
+        })
+        .then(response => response.text())
+        .then(result => window.location.replace("invoice.html"))
         .catch(error => console.log('error', error));
     }
     
