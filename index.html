@@ -16,7 +16,8 @@
 	src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<script src="js/sha.js"></script>
+
+     
 <script>
         <!-- define the callAPI function that takes a first name and last name as parameters
         var callAPI = (firstName,lastName)=>{
@@ -44,14 +45,14 @@
         
         function checkLoginInfo(){
         	var getUsername = document.getElementById("loginUsername").value;
-        	var getPassword = document.getElementById("loginPassword");
+        	var getPassword = document.getElementById("loginPassword").value;
         	alert(getUsername);
-        	var shaPassword = shaPassword(getPassword).toUpperCase();
+        	var shaPassword = sha256(getPassword);
         	alert(shaPassword);
         	var myHeaders = new Headers(); 
             myHeaders.append("Content-Type", "application/json");
             var raw = JSON.stringify({
-            	"query" : "SELECT * FROM laundrotech.User WHERE '"+ username +"' = username and password = '"+ shaPassword +"';"
+            	"query" : "SELECT * FROM laundrotech.User WHERE username ='"+ getUsername +"' and password = '"+ shaPassword +"';"
             	});
             
             console.log(raw);
@@ -76,7 +77,10 @@
                 	alert("You have logged into LaundroTech");
         			sessionStorage.setItem("userID", data[0].userID);
         			sessionStorage.setItem("username", data[0].username);
-        			sessionStorage.setItem("credit", "0");
+        			sessionStorage.setItem("credit", data[0].credit);
+        			console.log(sessionStorage.getItem('userID'));
+        	        console.log(sessionStorage.getItem('username'));
+        	        console.log(sessionStorage.getItem('credit'));
         			//window.location.href = "./bookingCode.html";
         		}
         	})
@@ -85,51 +89,82 @@
           
           function checkRegisterInfo(){
           	var getUsername = document.getElementById("RegisterUsername").value;
+          	var getEmail = document.getElementById("RegisterEmail").value;
+          	var getPassword = document.getElementById("RegisterPassword").value;
+          	var getName = document.getElementById("RegisterName").value;
+          	var getContactNo = document.getElementById("RegisterContactNo").value;
+          	
+          	alert(getUsername);
+          	alert(getEmail);
+          	alert(getPassword);
+          	alert(getName);
+          	alert(getContactNo);
+          	var shaPassword = sha256(getPassword);
+        	alert(shaPassword);
           	var myHeaders = new Headers(); 
-              myHeaders.append("Content-Type", "application/json");
-              var raw = JSON.stringify({
-              	"query" : "SELECT * FROM laundrotech.User WHERE '"+ username +"' = username;"                        
-              	});
-              console.log(raw);
-              var requestOptions = {
-                  method: 'POST',
-                  headers: myHeaders,
-                  body: raw,
-                  redirect: 'follow'
-          }
+            myHeaders.append("Content-Type", "application/json");
+            var raw = JSON.stringify({
+            	"query" : "SELECT * FROM laundrotech.User WHERE username ='"+ getUsername +"';"
+            	});
+            
+            console.log(raw);
+            var requestOptions = {
+                method: 'POST',
+                headers: myHeaders,
+                body: raw,
+                redirect: 'follow'
+        }
               
-              fetch("https://3rczj928aa.execute-api.us-east-1.amazonaws.com/prod/login", requestOptions)
-          	.then(response => response.text())
-          	.then(result => {
-          		alert("check1");
-                  var data = JSON.parse(result);
+            fetch("https://3rczj928aa.execute-api.us-east-1.amazonaws.com/prod/login", requestOptions)
+        	.then(response => response.text())
+        	.then(result => {
+        		alert("check1");
+                var data = JSON.parse(result);
                   if(data[0] == null){
-          			console.log("Wrong Username and/or Password");
-          			alert("Wrong Username and/or Password");
+                	  console.log("You have created an account with LaundroTech");
+                  	  alert("You have created an account with LaundroTech");
+                  	
+                  	sessionStorage.setItem("userID", "3");
+                  	sessionStorage.setItem("username", getUsername);
+              	    sessionStorage.setItem("password", shaPassword);
+              	    sessionStorage.setItem("role", "user");
+              	    sessionStorage.setItem("fullName", getName);
+              	    sessionStorage.setItem("email", getEmail);
+              	    sessionStorage.setItem("contactNo", getContactNo);
+              	    sessionStorage.setItem("credit", "0");
+              	  console.log(sessionStorage.getItem('userID'));
+      	          console.log(sessionStorage.getItem('username'));
+      	          console.log(sessionStorage.getItem('credit'));
+                  	
+            raw = JSON.stringify({"query":"INSERT INTO laundrotech.User (userID,username,password,role,fullName,email,contactNo,credit) VALUES (" + sessionStorage.getItem("userID") + "," + sessionStorage.getItem("username") + "," + sessionStorage.getItem("password") + "," + sessionStorage.getItem("role") + "," + sessionStorage.getItem("fullName") + "," + sessionStorage.getItem("email") + "," + sessionStorage.getItem("contactNo") + "," + sessionStorage.getItem("credit") + ");"});
+        
+         
+            console.log(raw);
+           var requestOptions = {
+                method: 'POST',
+                headers: myHeaders,
+                body: raw,
+                redirect: 'follow'
+                
+                }
+           alert("check2");
+            fetch("https://3rczj928aa.execute-api.us-east-1.amazonaws.com/prod/register", requestOptions)
+        	.then(response => response.text())
+        	alert("check3");
+                  	
+              	    //window.location.href = "./.html";
           		}
                   else {
-                    	console.log("You have created an account with LaundroTech");
-                    	alert("You have created an account with LaundroTech")
                     	
-                    	sessionStorage.setItem("userID", "RegisterUsername");
-                	    sessionStorage.setItem("username", "Registerpassword");
-                	    sessionStorage.setItem("credit", "0");
-                	    //window.location.href = "./.html";
+                	    console.log("Username has already been taken");
+              			alert("Username has already been taken");
           		}
           	})
           	.catch(error => console.log('error', error));
           }
          
 	    //const obj = {userID : '1', username : 'Bob', credit : '0'};
-        
-	    //sessionStorage.setItem('userID', 'user1');
-	    //sessionStorage.setItem('username', 'name');
-	    //sessionStorage.setItem('credit', '0');
-        //console.log(sessionStorage.getItem('userID'));
-        //console.log(sessionStorage.getItem('username'));
-        //console.log(sessionStorage.getItem('credit'));
-      
-        
+
     </script>
 <head>
 <title>Phantom by HTML5 UP</title>
@@ -256,10 +291,11 @@
 								-->
 					<form>
 
-						<label for="uname"><b>Username</b></label> <input type="text"
-							placeholder="Enter Username" name="uname" id="loginUsername"
-							required> <label for="psw"><b>Password</b></label> <input
-							type="password" placeholder="Enter Password" name="psw"
+						<label for="loginUsername"><b>Username</b></label> <input type="text"
+							placeholder="Enter Username" name="loginUsername" id="loginUsername"
+							required> 
+					    <label for="loginPassword"><b>Password</b></label> <input
+							type="password" placeholder="Enter Password" name="loginPassword"
 							id="loginPassword" required>
 
 						<button type="submit" onclick="checkLoginInfo()">Login</button>
@@ -279,27 +315,35 @@
 									<div class="modal-header">
 										<div class="avatar"></div>
 										<h4 class="modal-title">Register</h4>
-										<button type="button" class="close" data-dismiss="modal"
-											aria-hidden="true">&times;</button>
+										<!--  <button type="button" class="close" data-dismiss="modal"
+											aria-hidden="true">&times;</button> -->
 									</div>
 									<div class="modal-body">
-										<form action="/examples/actions/confirmation.php"
-											method="post">
+										<!--  <form action="/examples/actions/confirmation.php"
+											method="post"> -->
 											<div class="form-group">
-												<input type="text" placeholder="Enter Username" name="uname"
+												<input type="text" placeholder="Username" name="RegisterUsername"
 													id="RegisterUsername" required>
 											</div>
 											<div class="form-group">
-												<input type="email" class="form-control" name="email"
-													placeholder="Email" id="RegisterEmail" required>
+												<input type="text" placeholder="Name" name="RegisterName"
+													id="RegisterName" required>
 											</div>
 											<div class="form-group">
-												<input type="password" placeholder="Enter Password"
-													name="psw" id="RegisterPassword" required>
+												<input type="email" placeholder="Email" name="RegisterEmail"
+										            id="RegisterEmail" required>
 											</div>
 											<div class="form-group">
-												<button type="submit"
-													class="btn btn-primary btn-lg btn-block login-btn onclick="checkRegisterInfo()">Create
+												<input type="tel" placeholder="Contact Number" name="RegisterContactNo"
+													id="RegisterContactNo" required>
+											</div>
+											<div class="form-group">
+												<input type="password" placeholder="Password" name="RegisterPassword" 
+													id="RegisterPassword" required>
+											</div>
+											<div class="form-group">
+												<button type="submit" onclick="checkRegisterInfo()"
+													class="btn btn-primary btn-lg btn-block login-btn">Create
 													Account</button>
 											</div>
 										</form>
@@ -507,6 +551,7 @@
 	<script src="assets/js/breakpoints.min.js"></script>
 	<script src="assets/js/util.js"></script>
 	<script src="assets/js/main.js"></script>
+	<script src="assets/js/sha.js"></script>
 
 </body>
 </html>
