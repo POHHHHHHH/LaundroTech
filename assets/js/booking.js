@@ -44,10 +44,10 @@ function changeTimeslot(){
     myHeaders.append("Content-Type", "application/json");
 
     var raw = JSON.stringify({"query":"SELECT ts.bookingTime FROM (SELECT t.bookingTime, w.washingMachineID FROM laundrotech.Booking AS b, laundrotech.WashingMachine AS w, laundrotech.Timeslot AS t " + 
-        "WHERE b.FK_washingMachineID = w.washingMachineID AND w.location= 'pioneer' AND b.FK_timeslotID <> t.timeslotID AND b.bookingDate = '" + selectedDate + "' " + 
+        "WHERE b.FK_washingMachineID = w.washingMachineID AND w.location= '" + sessionStorage.getItem("location") + "' AND b.FK_timeslotID <> t.timeslotID AND b.bookingDate = '" + selectedDate + "' " + 
         "UNION " + 
         "SELECT t.bookingTime, w.washingMachineID FROM laundrotech.Booking AS b, laundrotech.WashingMachine AS w, laundrotech.Timeslot AS t " + 
-        "WHERE (w.washingMachineID NOT IN (SELECT bk.FK_washingMachineID FROM laundrotech.Booking AS bk WHERE bk.bookingDate = '" + selectedDate +"')) AND w.location= 'pioneer') AS ts " + 
+        "WHERE (w.washingMachineID NOT IN (SELECT bk.FK_washingMachineID FROM laundrotech.Booking AS bk WHERE bk.bookingDate = '" + selectedDate +"')) AND w.location= '" + sessionStorage.getItem("location") + "') AS ts " + 
         "GROUP BY ts.bookingTime"});
     var requestOptions = {
         method: 'POST',
@@ -92,10 +92,10 @@ function displayTable(){
 
     var raw = JSON.stringify({"query":"SELECT wm.washingMachineID, wm.washingMachineBrand, wm.washingMachineModel, wm.price, wm.washingMachineAddress FROM " + 
                     "(SELECT t.bookingTime, w.washingMachineID, w.washingMachineBrand, w.washingMachineModel, w.price, w.washingMachineAddress FROM laundrotech.Booking AS b, laundrotech.WashingMachine AS w, laundrotech.Timeslot AS t " + 
-                    "WHERE b.FK_washingMachineID = w.washingMachineID AND w.location= 'pioneer' AND b.FK_timeslotID <> t.timeslotID AND b.bookingDate = '" + selectedDate + "' " + 
+                    "WHERE b.FK_washingMachineID = w.washingMachineID AND w.location= '" + sessionStorage.getItem("location") + "' AND b.FK_timeslotID <> t.timeslotID AND b.bookingDate = '" + selectedDate + "' " + 
                     "UNION " + 
                     "SELECT t.bookingTime, w.washingMachineID, w.washingMachineBrand, w.washingMachineModel, w.price, w.washingMachineAddress FROM laundrotech.Booking AS b, laundrotech.WashingMachine AS w, laundrotech.Timeslot AS t " + 
-                    "WHERE (w.washingMachineID NOT IN (SELECT bk.FK_washingMachineID FROM laundrotech.Booking AS bk WHERE bk.bookingDate = '" + selectedDate + "')) AND w.location= 'pioneer') AS wm " + 
+                    "WHERE (w.washingMachineID NOT IN (SELECT bk.FK_washingMachineID FROM laundrotech.Booking AS bk WHERE bk.bookingDate = '" + selectedDate + "')) AND w.location= '" + sessionStorage.getItem("location") + "') AS wm " + 
                     "WHERE wm.bookingTime = '" + timeslot + "' GROUP BY wm.washingMachineID"});
     var requestOptions = {
         method: 'POST',
@@ -156,8 +156,6 @@ function storeWMDetails(row){
     var selectedDate = day + "/" + month + "/" + year;
     var timeslot = document.getElementById("bookingTime").value;
 
-    sessionStorage.setItem('userID', '1');
-    sessionStorage.setItem("location", "pioneer");
     sessionStorage.setItem("washingMachineID", row.cells[0].innerHTML);
     sessionStorage.setItem("price", row.cells[3].innerHTML);
     sessionStorage.setItem("washingMachineAddres", row.cells[4].innerHTML);
