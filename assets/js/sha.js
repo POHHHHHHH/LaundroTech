@@ -94,3 +94,119 @@ var sha256 = function sha256(ascii) {
 	}
 	return result;
 };
+
+function checkLoginInfo(){
+	var getUsername = document.getElementById("loginUsername").value;
+	var getPassword = document.getElementById("loginPassword").value;
+	//alert(getUsername);
+	var shaPassword = sha256(getPassword);
+	//alert(shaPassword);
+	var myHeaders = new Headers(); 
+    myHeaders.append("Content-Type", "application/json");
+    var raw = JSON.stringify({
+    	"query" : "SELECT * FROM laundrotech.User WHERE username ='"+ getUsername +"' and password = '"+ shaPassword +"';"
+    	});
+    
+    console.log(raw);
+    var requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        body: raw,
+        redirect: 'follow'
+}
+    
+    fetch("https://3rczj928aa.execute-api.us-east-1.amazonaws.com/prod/login", requestOptions)
+	.then(response => response.text())
+	.then(result => {
+		//alert("check1");
+        var data = JSON.parse(result);
+        if(data[0] == null){
+			console.log("Wrong Username and/or Password");
+			alert("Wrong Username and/or Password");
+		}
+        else{
+        	console.log("You have logged into LaundroTech");
+        	alert("You have logged into LaundroTech");
+			sessionStorage.setItem("userID", data[0].userID);
+			sessionStorage.setItem("username", data[0].username);
+			sessionStorage.setItem("credit", data[0].credit);
+			console.log(sessionStorage.getItem('userID'));
+	        console.log(sessionStorage.getItem('username'));
+	        console.log(sessionStorage.getItem('credit'));
+			//window.location.href = "./.html";
+		}
+	})
+	.catch(error => console.log('error', error));
+}
+  
+  function checkRegisterInfo(){
+  	var getUsername = document.getElementById("RegisterUsername").value;
+  	var getEmail = document.getElementById("RegisterEmail").value;
+  	var getPassword = document.getElementById("RegisterPassword").value;
+  	var getName = document.getElementById("RegisterName").value;
+  	var getContactNo = document.getElementById("RegisterContactNo").value;
+  	//alert(getUsername);
+  	//alert(getEmail);
+  	//alert(getPassword);
+  	//alert(getName);
+  	//alert(getContactNo);
+  	var shaPassword = sha256(getPassword);
+	//alert(shaPassword);
+  	var myHeaders = new Headers(); 
+    myHeaders.append("Content-Type", "application/json");
+    var raw = JSON.stringify({
+    	"query" : "SELECT * FROM laundrotech.User WHERE username ='"+ getUsername +"';"
+    	});
+    
+    console.log(raw);
+    var requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        body: raw,
+        redirect: 'follow'
+}
+      
+    fetch("https://3rczj928aa.execute-api.us-east-1.amazonaws.com/prod/login", requestOptions)
+	.then(response => response.text())
+	.then(result => {
+		
+        var data = JSON.parse(result);
+          if(data[0] == null){
+        	  console.log("You have created an account with LaundroTech");
+          	  alert("You have created an account with LaundroTech");
+          	
+          	sessionStorage.setItem("userID", "3");
+          	sessionStorage.setItem("username", getUsername);
+      	    sessionStorage.setItem("password", shaPassword);
+      	    sessionStorage.setItem("role", "user");
+      	    sessionStorage.setItem("fullName", getName);
+      	    sessionStorage.setItem("email", getEmail);
+      	    sessionStorage.setItem("contactNo", getContactNo);
+      	    sessionStorage.setItem("credit", "0");
+      	    console.log(sessionStorage.getItem('userID'));
+	        console.log(sessionStorage.getItem('username'));
+	        console.log(sessionStorage.getItem('credit'));
+          	
+    raw = JSON.stringify({"query":"INSERT INTO laundrotech.User (username,password,role,fullName,email,contactNo,credit) VALUES ('" + sessionStorage.getItem("username") + "','" + sessionStorage.getItem("password") + "','" + sessionStorage.getItem("role") + "','" + sessionStorage.getItem("fullName") + "','" + sessionStorage.getItem("email") + "','" + sessionStorage.getItem("contactNo") + "','" + sessionStorage.getItem("credit") + "');"});
+
+ 
+    console.log(raw);
+    requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        body: raw,
+        redirect: 'follow'
+        }
+    
+    fetch("https://3rczj928aa.execute-api.us-east-1.amazonaws.com/prod/register", requestOptions)
+	.then(response => response.text())
+     //window.location.href = "./.html";
+  		}
+          else {
+            	
+        	    console.log("Username has already been taken");
+      			alert("Username has already been taken");
+  		}
+  	})
+  	.catch(error => console.log('error', error));
+  }

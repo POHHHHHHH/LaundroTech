@@ -17,155 +17,7 @@
 <script
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
-     
-<script>
-        <!-- define the callAPI function that takes a first name and last name as parameters
-        var callAPI = (firstName,lastName)=>{
-            // instantiate a headers object
-            var myHeaders = new Headers(); 
-            // add content type header to object
-            myHeaders.append("Content-Type", "application/json");
-            // using built in JSON utility package turn object to string and store in a variable
-            var raw = JSON.stringify({"firstName":firstName,"lastName":lastName});
-            // create a JSON object with parameters for API call and store in a variable
-            var requestOptions = {
-                method: 'POST',
-                headers: myHeaders,
-                body: raw,
-                redirect: 'follow'
-            };
-
-            // make API call with parameters and use promises to get response
-            fetch("https://3rczj928aa.execute-api.us-east-1.amazonaws.com/prod/authlogin", requestOptions)
-            .then(response => response.text())
-            .then(result => alert(JSON.parse(result).body))
-            .catch(error => console.log('error', error));
-        } 
-        -->
-        
-        function checkLoginInfo(){
-        	var getUsername = document.getElementById("loginUsername").value;
-        	var getPassword = document.getElementById("loginPassword").value;
-        	alert(getUsername);
-        	var shaPassword = sha256(getPassword);
-        	alert(shaPassword);
-        	var myHeaders = new Headers(); 
-            myHeaders.append("Content-Type", "application/json");
-            var raw = JSON.stringify({
-            	"query" : "SELECT * FROM laundrotech.User WHERE username ='"+ getUsername +"' and password = '"+ shaPassword +"';"
-            	});
-            
-            console.log(raw);
-            var requestOptions = {
-                method: 'POST',
-                headers: myHeaders,
-                body: raw,
-                redirect: 'follow'
-        }
-            
-            fetch("https://3rczj928aa.execute-api.us-east-1.amazonaws.com/prod/login", requestOptions)
-        	.then(response => response.text())
-        	.then(result => {
-        		alert("check1");
-                var data = JSON.parse(result);
-                if(data[0] == null){
-        			console.log("Wrong Username and/or Password");
-        			alert("Wrong Username and/or Password");
-        		}
-                else{
-                	console.log("You have logged into LaundroTech");
-                	alert("You have logged into LaundroTech");
-        			sessionStorage.setItem("userID", data[0].userID);
-        			sessionStorage.setItem("username", data[0].username);
-        			sessionStorage.setItem("credit", data[0].credit);
-        			console.log(sessionStorage.getItem('userID'));
-        	        console.log(sessionStorage.getItem('username'));
-        	        console.log(sessionStorage.getItem('credit'));
-        			//window.location.href = "./bookingCode.html";
-        		}
-        	})
-        	.catch(error => console.log('error', error));
-        }
-          
-          function checkRegisterInfo(){
-          	var getUsername = document.getElementById("RegisterUsername").value;
-          	var getEmail = document.getElementById("RegisterEmail").value;
-          	var getPassword = document.getElementById("RegisterPassword").value;
-          	var getName = document.getElementById("RegisterName").value;
-          	var getContactNo = document.getElementById("RegisterContactNo").value;
-          	
-          	alert(getUsername);
-          	alert(getEmail);
-          	alert(getPassword);
-          	alert(getName);
-          	alert(getContactNo);
-          	var shaPassword = sha256(getPassword);
-        	alert(shaPassword);
-          	var myHeaders = new Headers(); 
-            myHeaders.append("Content-Type", "application/json");
-            var raw = JSON.stringify({
-            	"query" : "SELECT * FROM laundrotech.User WHERE username ='"+ getUsername +"';"
-            	});
-            
-            console.log(raw);
-            var requestOptions = {
-                method: 'POST',
-                headers: myHeaders,
-                body: raw,
-                redirect: 'follow'
-        }
-              
-            fetch("https://3rczj928aa.execute-api.us-east-1.amazonaws.com/prod/login", requestOptions)
-        	.then(response => response.text())
-        	.then(result => {
-        		alert("check1");
-                var data = JSON.parse(result);
-                  if(data[0] == null){
-                	  console.log("You have created an account with LaundroTech");
-                  	  alert("You have created an account with LaundroTech");
-                  	
-                  	sessionStorage.setItem("userID", "3");
-                  	sessionStorage.setItem("username", getUsername);
-              	    sessionStorage.setItem("password", shaPassword);
-              	    sessionStorage.setItem("role", "user");
-              	    sessionStorage.setItem("fullName", getName);
-              	    sessionStorage.setItem("email", getEmail);
-              	    sessionStorage.setItem("contactNo", getContactNo);
-              	    sessionStorage.setItem("credit", "0");
-              	  console.log(sessionStorage.getItem('userID'));
-      	          console.log(sessionStorage.getItem('username'));
-      	          console.log(sessionStorage.getItem('credit'));
-                  	
-            raw = JSON.stringify({"query":"INSERT INTO laundrotech.User (userID,username,password,role,fullName,email,contactNo,credit) VALUES (" + sessionStorage.getItem("userID") + "," + sessionStorage.getItem("username") + "," + sessionStorage.getItem("password") + "," + sessionStorage.getItem("role") + "," + sessionStorage.getItem("fullName") + "," + sessionStorage.getItem("email") + "," + sessionStorage.getItem("contactNo") + "," + sessionStorage.getItem("credit") + ");"});
-        
-         
-            console.log(raw);
-           var requestOptions = {
-                method: 'POST',
-                headers: myHeaders,
-                body: raw,
-                redirect: 'follow'
-                
-                }
-           alert("check2");
-            fetch("https://3rczj928aa.execute-api.us-east-1.amazonaws.com/prod/register", requestOptions)
-        	.then(response => response.text())
-        	alert("check3");
-                  	
-              	    //window.location.href = "./.html";
-          		}
-                  else {
-                    	
-                	    console.log("Username has already been taken");
-              			alert("Username has already been taken");
-          		}
-          	})
-          	.catch(error => console.log('error', error));
-          }
-         
-	    //const obj = {userID : '1', username : 'Bob', credit : '0'};
-
-    </script>
+<script> </script>
 <head>
 <title>Phantom by HTML5 UP</title>
 <meta charset="utf-8" />
@@ -177,73 +29,7 @@
 </noscript>
 
 <style>
-.modal-login {
-	color: #636363;
-	width: 350px;
-	margin: 80px auto 0;
-}
 
-.modal-login .modal-content {
-	padding: 20px;
-	border-radius: 5px;
-	border: none;
-}
-
-.modal-login .modal-header {
-	border-bottom: none;
-	position: relative;
-	justify-content: center;
-}
-
-.modal-login h4 {
-	text-align: center;
-	font-size: 20px;
-	margin: 30px 0 -15px;
-}
-
-.modal-login .form-control:focus {
-	border-color: #70c5c0;
-}
-
-.modal-login .form-control, .modal-login .btn {
-	min-height: 40px;
-	border-radius: 3px;
-}
-
-}
-.modal-login .modal-footer {
-	background: #ecf0f1;
-	border-color: #dee4e7;
-	text-align: center;
-	justify-content: center;
-	margin: 0 -20px -20px;
-	border-radius: 5px;
-	font-size: 13px;
-}
-
-.modal-login .modal-footer a {
-	color: #999;
-}
-
-.modal-login .btn {
-	color: #fff;
-	border-radius: 4px;
-	background: white;
-	text-decoration: none;
-	transition: all 0.4s;
-	line-height: normal;
-	border: none;
-}
-
-.modal-login .btn:hover, .modal-login .btn:focus {
-	background: white;
-	outline: none;
-}
-
-.trigger-btn {
-	display: inline-block;
-	margin: 10px auto;
-}
 </style>
 </head>
 <body class="is-preload">
@@ -294,21 +80,17 @@
 						<label for="loginUsername"><b>Username</b></label> <input type="text"
 							placeholder="Enter Username" name="loginUsername" id="loginUsername"
 							required> 
-					    <label for="loginPassword"><b>Password</b></label> <input
-							type="password" placeholder="Enter Password" name="loginPassword"
-							id="loginPassword" required>
+							</br>
+					    <label for="loginPassword"><b>Password</b></label> <input type="password" 
+					        placeholder="Enter Password" name="loginPassword" id="loginPassword" 
+					        required>
 
 						<button type="submit" onclick="checkLoginInfo()">Login</button>
 						<button href="#myModal" class="trigger-btn" data-toggle="modal">Register</button>
 
+						<!-- <a href="#">Forgot Password?</a>
 
-						<a href="#">Forgot Password?</a>
-
-
-						<!-- set button onClick method to call function we defined passing input values as parameters 
-        <button type="button" onclick="callAPI(document.getElementById('fName').value,document.getElementById('lName').value)">Call API</button>
-        -->
-						<!-- Modal HTML -->
+						 Modal HTML -->
 						<div id="myModal" class="modal fade">
 							<div class="modal-dialog modal-login">
 								<div class="modal-content">
@@ -356,139 +138,7 @@
 					</form>
 
 				</header>
-				<!--  section class="tiles">
-								<article class="style1">
-									<span class="image">
-										<img src="images/pic01.jpg" alt="" />
-									</span>
-									<a href="generic.html">
-										<h2>Magna</h2>
-										<div class="content">
-											<p>Sed nisl arcu euismod sit amet nisi lorem etiam dolor veroeros et feugiat.</p>
-										</div>
-									</a>
-								</article>
-								<article class="style2">
-									<span class="image">
-										<img src="images/pic02.jpg" alt="" />
-									</span>
-									<a href="generic.html">
-										<h2>Lorem</h2>
-										<div class="content">
-											<p>Sed nisl arcu euismod sit amet nisi lorem etiam dolor veroeros et feugiat.</p>
-										</div>
-									</a>
-								</article>
-								<article class="style3">
-									<span class="image">
-										<img src="images/pic03.jpg" alt="" />
-									</span>
-									<a href="generic.html">
-										<h2>Feugiat</h2>
-										<div class="content">
-											<p>Sed nisl arcu euismod sit amet nisi lorem etiam dolor veroeros et feugiat.</p>
-										</div>
-									</a>
-								</article>
-								<article class="style4">
-									<span class="image">
-										<img src="images/pic04.jpg" alt="" />
-									</span>
-									<a href="generic.html">
-										<h2>Tempus</h2>
-										<div class="content">
-											<p>Sed nisl arcu euismod sit amet nisi lorem etiam dolor veroeros et feugiat.</p>
-										</div>
-									</a>
-								</article>
-								<article class="style5">
-									<span class="image">
-										<img src="images/pic05.jpg" alt="" />
-									</span>
-									<a href="generic.html">
-										<h2>Aliquam</h2>
-										<div class="content">
-											<p>Sed nisl arcu euismod sit amet nisi lorem etiam dolor veroeros et feugiat.</p>
-										</div>
-									</a>
-								</article>
-								<article class="style6">
-									<span class="image">
-										<img src="images/pic06.jpg" alt="" />
-									</span>
-									<a href="generic.html">
-										<h2>Veroeros</h2>
-										<div class="content">
-											<p>Sed nisl arcu euismod sit amet nisi lorem etiam dolor veroeros et feugiat.</p>
-										</div>
-									</a>
-								</article>
-								<article class="style2">
-									<span class="image">
-										<img src="images/pic07.jpg" alt="" />
-									</span>
-									<a href="generic.html">
-										<h2>Ipsum</h2>
-										<div class="content">
-											<p>Sed nisl arcu euismod sit amet nisi lorem etiam dolor veroeros et feugiat.</p>
-										</div>
-									</a>
-								</article>
-								<article class="style3">
-									<span class="image">
-										<img src="images/pic08.jpg" alt="" />
-									</span>
-									<a href="generic.html">
-										<h2>Dolor</h2>
-										<div class="content">
-											<p>Sed nisl arcu euismod sit amet nisi lorem etiam dolor veroeros et feugiat.</p>
-										</div>
-									</a>
-								</article>
-								<article class="style1">
-									<span class="image">
-										<img src="images/pic09.jpg" alt="" />
-									</span>
-									<a href="generic.html">
-										<h2>Nullam</h2>
-										<div class="content">
-											<p>Sed nisl arcu euismod sit amet nisi lorem etiam dolor veroeros et feugiat.</p>
-										</div>
-									</a>
-								</article>
-								<article class="style5">
-									<span class="image">
-										<img src="images/pic10.jpg" alt="" />
-									</span>
-									<a href="generic.html">
-										<h2>Ultricies</h2>
-										<div class="content">
-											<p>Sed nisl arcu euismod sit amet nisi lorem etiam dolor veroeros et feugiat.</p>
-										</div>
-									</a>
-								</article>
-								<article class="style6">
-									<span class="image">
-										<img src="images/pic11.jpg" alt="" />
-									</span>
-									<a href="generic.html">
-										<h2>Dictum</h2>
-										<div class="content">
-											<p>Sed nisl arcu euismod sit amet nisi lorem etiam dolor veroeros et feugiat.</p>
-										</div>
-									</a>
-								</article>
-								<article class="style4">
-									<span class="image">
-										<img src="images/pic12.jpg" alt="" />
-									</span>
-									<a href="generic.html">
-										<h2>Pretium</h2>
-										<div class="content">
-											<p>Sed nisl arcu euismod sit amet nisi lorem etiam dolor veroeros et feugiat.</p>
-										</div>
-									</a>
-								</article>-->
+				
 				</section>
 			</div>
 		</div>
@@ -498,25 +148,35 @@
 			<div class="inner">
 				<section>
 					<h2>Get in touch</h2>
-					<form method="post" action="#">
 						<div class="fields">
 							<div class="field half">
-								<input type="text" name="name" id="name" placeholder="Name" />
+								<li><a href="#" class="icon solid style2 fa-phone"><span
+								class="label">Phone</span></a><p> +65 6556 8000 </p></li>
 							</div>
 							<div class="field half">
-								<input type="email" name="email" id="email" placeholder="Email" />
+								<li><a href="#" class="icon solid style2 fa-envelope"><span
+								class="label">Email</span></a><p> laundrotech@ncs.com.sg </p></li>
 							</div>
 							<div class="field">
-								<textarea name="message" id="message" placeholder="Message"></textarea>
+								<type="message" id="message" placeholder="Message"></textarea>
 							</div>
 						</div>
-						<ul class="actions">
+						
+						<!-- <ul class="actions">
 							<li><input type="submit" value="Send" class="primary" /></li>
-						</ul>
+						</ul> -->
+						
 					</form>
 				</section>
 				<section>
-					<h2>Follow</h2>
+				
+				<h2>LaundroTech Pte. Ltd</h2>
+				
+				<p>5 Ang Mo Kio Street 62<br />
+                   NCS Hub, Singapore 569141 <br /></p>
+								
+				
+					<!--  <h2>Follow</h2>
 					<ul class="icons">
 						<li><a href="#" class="icon brands style2 fa-twitter"><span
 								class="label">Twitter</span></a></li>
@@ -534,7 +194,7 @@
 								class="label">Phone</span></a></li>
 						<li><a href="#" class="icon solid style2 fa-envelope"><span
 								class="label">Email</span></a></li>
-					</ul>
+					</ul> -->
 				</section>
 				<ul class="copyright">
 					<li>&copy; Untitled. All rights reserved</li>
