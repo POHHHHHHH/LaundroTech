@@ -133,7 +133,7 @@ function checkLoginInfo(){
 			console.log(sessionStorage.getItem('userID'));
 	        console.log(sessionStorage.getItem('username'));
 	        console.log(sessionStorage.getItem('credit'));
-			//window.location.href = "./.html";
+			window.location.href = "index.html";
 		}
 	})
 	.catch(error => console.log('error', error));
@@ -175,7 +175,7 @@ function checkLoginInfo(){
         	  console.log("You have created an account with LaundroTech");
           	  alert("You have created an account with LaundroTech");
           	
-          	sessionStorage.setItem("userID", "3");
+          	sessionStorage.setItem("userID", datap[0].userID);
           	sessionStorage.setItem("username", getUsername);
       	    sessionStorage.setItem("password", shaPassword);
       	    sessionStorage.setItem("role", "user");
@@ -200,7 +200,7 @@ function checkLoginInfo(){
     
     fetch("https://3rczj928aa.execute-api.us-east-1.amazonaws.com/prod/register", requestOptions)
 	.then(response => response.text())
-     //window.location.href = "./.html";
+		window.location.href = "login.html";
   		}
           else {
             	
