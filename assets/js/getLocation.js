@@ -22,7 +22,7 @@ function getLocation() {
                 console.log("else");
                 for (var i = 0; i < data.length; i++) {
                     count = i + 1;
-                    str += "<article class='style" + count + "'>" + "<span class='image'>" + "<img src='images/pic" + count + ".jpg'/> </span>" + "<a href='jm.html' onclick='Location("+data[i].location+")'>" + "<h2 id='location' name='location'>" + data[i].location + "</h2>" + "</a></article>"
+                    str += "<article class='style" + count + "'>" + "<span class='image'>" + "<img src='images/pic" + count + ".jpg'/> </span>" + "<a href='booking.html' onclick='Location("+data[i].location+")'>" + "<h2 id='location' name='location'>" + data[i].location + "</h2>" + "</a></article>"
                 }
                 document.getElementById("locationTile").innerHTML = str;
             }
