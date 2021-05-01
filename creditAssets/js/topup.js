@@ -1,8 +1,4 @@
-function getPromotion(){
-    sessionStorage.setItem("username", "user01");
-    sessionStorage.setItem("userID", "2");
-
-    
+function getPromotion(){    
     var myHeaders = new Headers(); 
 	myHeaders.append("Content-Type", "application/json");
 	var raw = JSON.stringify({"query":"SELECT * FROM laundrotech.promotion;"});
