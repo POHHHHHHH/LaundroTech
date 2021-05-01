@@ -1,0 +1,39 @@
+.updateButton {
+    margin: 3px;
+    font-size: 10px;
+    background-color: greenyellow;
+    
+}
+
+.deleteButton {
+    margin: 3px;
+    font-size: 10px;
+    background-color: red;
+}
+
+.tableStyle {
+    height: 500px;
+    overflow: auto;
+}
+
+#tableName {
+    width: 200px;
+}
+
+.inline {
+    margin-right: 20px;
+    display: inline-block;
+}
+
+#createButtonID{
+    display: none;
+    margin-left: 10px;
+    font-size: 10px;
+    background-color: yellow;
+}
+
+.createButton{
+    margin: 3px;
+    font-size: 10px;
+    background-color: yellow;
+}

@@ -1,0 +1,17 @@
+#bookingDate{
+    width: 200px;
+    margin-top: 150px;
+    margin-bottom: 200px;
+}
+
+
+#bookingTime{
+    width: 200px;
+    margin-left: 50px;
+    margin-bottom: 200px;
+    display: inline-block;
+}
+
+.availWM tbody tr:hover  {
+    background-color: lavenderblush;
+}
