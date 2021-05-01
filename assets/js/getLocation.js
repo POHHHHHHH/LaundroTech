@@ -22,8 +22,7 @@ function getLocation() {
                 console.log("else");
                 for (var i = 0; i < data.length; i++) {
                     count = i + 1;
-                    str += "<article class='style" + count + "'>" + "<span class='image'>" + "<img src='images/pic" + count + ".jpg'/> </span>" + "<a href='jm.html' onclick='Location()'>" + "<h2 id='location' name='location'>" + data[i].location + "</h2>" + "</a></article>"
-
+                    str += "<article class='style" + count + "'>" + "<span class='image'>" + "<img src='images/pic" + count + ".jpg'/> </span>" + "<a href='jm.html' onclick='Location("+data[i].location+")'>" + "<h2 id='location' name='location'>" + data[i].location + "</h2>" + "</a></article>"
                 }
                 document.getElementById("locationTile").innerHTML = str;
             }
@@ -31,6 +30,7 @@ function getLocation() {
         .catch(error => console.log('error', error));
 }
 
-function Location() {
+function Location(location) {
     var locationID = document.getElementById("locationID").innerHTML;
+    sessionStorage.setItem("location",location);
 }

@@ -130,9 +130,11 @@ function checkLoginInfo(){
 			sessionStorage.setItem("userID", data[0].userID);
 			sessionStorage.setItem("username", data[0].username);
 			sessionStorage.setItem("credit", data[0].credit);
+			sessionStorage.setItem("role", data[0].role);
 			console.log(sessionStorage.getItem('userID'));
 	        console.log(sessionStorage.getItem('username'));
 	        console.log(sessionStorage.getItem('credit'));
+			console.log(sessionStorage.getItem('role'));
 			window.location.href = "index.html";
 		}
 	})
@@ -174,15 +176,7 @@ function checkLoginInfo(){
           if(data[0] == null){
         	  console.log("You have created an account with LaundroTech");
           	  alert("You have created an account with LaundroTech");
-          	
-          	sessionStorage.setItem("userID", datap[0].userID);
-          	sessionStorage.setItem("username", getUsername);
-      	    sessionStorage.setItem("password", shaPassword);
-      	    sessionStorage.setItem("role", "user");
-      	    sessionStorage.setItem("fullName", getName);
-      	    sessionStorage.setItem("email", getEmail);
-      	    sessionStorage.setItem("contactNo", getContactNo);
-      	    sessionStorage.setItem("credit", "0");
+
       	    console.log(sessionStorage.getItem('userID'));
 	        console.log(sessionStorage.getItem('username'));
 	        console.log(sessionStorage.getItem('credit'));
