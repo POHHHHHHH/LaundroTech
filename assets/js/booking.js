@@ -15,11 +15,10 @@ Date.prototype.addHours = function(h){
 }
 
 function selectDate(){
-
     var today = new Date().addHours(8).toISOString().split('T')[0];
     document.getElementsByName("bookingDate")[0].setAttribute('min', today);
-
 }
+
 window.onload = selectDate;
 
 function changeTimeslot(){
@@ -181,6 +180,4 @@ function storeWMDetails(row){
         window.location.href = "review.html";
     })
     .catch(error => console.log('error', error));
-    
-    
 }
