@@ -1,7 +1,8 @@
 function getActiveBooking() {
+    var getUserID = sessionStorage.getItem("userID");
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
-    var raw = JSON.stringify({"query": "SELECT bookingID,bookingDate,startTime,endTime, bookingCode FROM laundrotech.Booking where bookingStatus='active' and FK_userID = 2 ;"});
+    var raw = JSON.stringify({"query": "SELECT bookingID,bookingDate,startTime,endTime, bookingCode FROM laundrotech.Booking where bookingStatus='active' and FK_userID = "+getUserID+" ;"});
     console.log(raw);
     var requestOptions = {
         method: 'POST',
@@ -37,9 +38,10 @@ function getActiveBooking() {
 }
 
 function getCompletedBooking() {
+    var getUserID = sessionStorage.getItem("userID");
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
-    var raw = JSON.stringify({"query": "SELECT bookingID,bookingDate,startTime,endTime, bookingCode FROM laundrotech.Booking where bookingStatus in ('completed','canceled') and FK_userID = 2 ;"});
+    var raw = JSON.stringify({"query": "SELECT bookingID,bookingDate,startTime,endTime, bookingCode FROM laundrotech.Booking where bookingStatus in ('completed','canceled') and FK_userID = "+getUserID+" ;"});
     console.log(raw);
     var requestOptions = {
         method: 'POST',
@@ -74,7 +76,6 @@ function getCompletedBooking() {
 }
 
 function callMethod(bookingId) {
-    var userID = 2;
     updateCancel(bookingId);
     updateRefund(userID);
 
