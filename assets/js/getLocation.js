@@ -1,4 +1,6 @@
 function getLocation() {
+    event.preventDefault();
+
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
     var raw = JSON.stringify({"query": "SELECT distinct location FROM laundrotech.WashingMachine;"});
@@ -22,7 +24,8 @@ function getLocation() {
                 console.log("else");
                 for (var i = 0; i < data.length; i++) {
                     count = i + 1;
-                    str += "<article class='style" + count + "'>" + "<span class='image'>" + "<img src='images/pic" + count + ".jpg'/> </span>" + "<a href='booking.html' onclick='Location("+data[i].location+")'>" + "<h2 id='location' name='location'>" + data[i].location + "</h2>" + "</a></article>"
+                    str += "<article class='style" + count + "'>" + "<span class='image'>" + "<img src='images/pic" + count + ".jpg'/> </span>" + "<a id='"+data[i].location+"' href='booking.html' onclick='Location(this.id)'>" + "<h2>" + data[i].location + "</h2>" + "</a></article>"     ;
+                        // str += "<article class='style" + count + "'>" + "<span class='image'>" + "<img src='images/pic" + count + ".jpg'/> </span>" + "<a href='booking.html' onclick='Location("+data[i].location+")'>" + "<h2 id='location' name='location'>" + data[i].location + "</h2>" + "</a></article>"
                 }
                 document.getElementById("locationTile").innerHTML = str;
             }
@@ -31,6 +34,6 @@ function getLocation() {
 }
 
 function Location(location) {
-    var locationID = document.getElementById("locationID").innerHTML;
-    sessionStorage.setItem("location",location);
+    var locationID = location;
+    sessionStorage.setItem("location", locationID);
 }
