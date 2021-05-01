@@ -128,7 +128,6 @@ function checkLoginInfo() {
 			}
 			else {
 				console.log("You have logged into LaundroTech");
-				alert("You have logged into LaundroTech");
 				sessionStorage.setItem("userID", data[0].userID);
 				sessionStorage.setItem("username", data[0].username);
 				sessionStorage.setItem("credit", data[0].credit);

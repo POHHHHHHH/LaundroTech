@@ -72,10 +72,14 @@ function getCompletedBooking() {
 }
 
 function callMethod(bookingId) {
-    updateCancel(bookingId);
-    var userID = sessionStorage.getItem("userID");
+    var result = confirm("要delete吗");
+    if (result) {
+        updateCancel(bookingId);
+        var userID = sessionStorage.getItem("userID");
 
-    updateRefund(userID, bookingId);
+        updateRefund(userID, bookingId);
+    }
+
 }
 
 function updateCancel(bookingId) {
