@@ -1,0 +1,241 @@
+<!DOCTYPE HTML>
+<!--
+	Phantom by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Book a Washing Machine</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+		<!-- <link rel="stylesheet" type="text/css" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/smoothness/jquery-ui.css" media="all">
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+        <script type="text/javascript" src="http://cdn.jquerytools.org/1.2.6/jquery.tools.min.js"></script>
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script> -->
+
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+		<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+		
+		
+		<!-- <script type="text/javascript">
+			    $(document).ready(function() {
+				$('#bookingDate').datepicker({
+					onSelect: function(dateText, inst) {
+						//Get today's date at midnight
+						var today = new Date();
+						today = Date.parse(today.getMonth()+1+'/'+today.getDate()+'/'+today.getFullYear());
+						//Get the selected date (also at midnight)
+						var selDate = Date.parse(dateText);
+
+						if(selDate < today) {
+							//If the selected date was before today, continue to show the datepicker
+							$('#bookingDate').val('');
+							$(inst).datepicker('show');
+						}
+					}
+				});
+			}); 
+		</script> -->
+		<script type="text/javascript">
+			function selectDate(){
+
+				var today = new Date().toISOString().split('T')[0];
+				document.getElementsByName("bookingDate")[0].setAttribute('min', today);
+
+			}
+			window.onload = selectDate;
+				
+			function changeTimeslot(){
+
+				var today = new Date().toISOString().split('T')[0];
+				document.getElementsByName("bookingDate")[0].setAttribute('min', today);
+
+				var date = new Date(document.getElementById("bookingDate").value);
+				var day = date.getDate();
+				if(day < 10){
+					day = "0" + day;
+				}
+				var month = date.getMonth()+1;
+				if(month < 10){
+					month = "0"+ month;
+				}
+				var year = date.getFullYear();
+
+				var selectedDate = day + "/" + month + "/" + year;
+				console.log(selectedDate)
+				var myHeaders = new Headers(); 
+				myHeaders.append("Content-Type", "application/json");
+
+				var raw = JSON.stringify({"query":"SELECT ts.bookingTime FROM (SELECT t.bookingTime, w.washingMachineID FROM laundrotech.Booking AS b, laundrotech.WashingMachine AS w, laundrotech.Timeslot AS t WHERE b.FK_washingMachineID = w.washingMachineID AND w.location= 'pioneer' AND b.FK_timeslotID <> t.timeslotID AND b.bookingDate = '" + selectedDate + "' UNION SELECT t.bookingTime, w.washingMachineID FROM laundrotech.Booking AS b, laundrotech.WashingMachine AS w, laundrotech.Timeslot AS t WHERE (w.washingMachineID NOT IN (SELECT bk.FK_washingMachineID FROM laundrotech.Booking AS bk)) AND w.location= 'pioneer' AND b.FK_timeslotID <> t.timeslotID AND b.bookingDate = '" + selectedDate + "') AS ts GROUP BY ts.bookingTime"});
+				console.log(raw);
+				var requestOptions = {
+					method: 'POST',
+					headers: myHeaders,
+					body: raw,
+					redirect: 'follow'
+				};
+
+				var str = "";
+				fetch("https://3rczj928aa.execute-api.us-east-1.amazonaws.com/prod/gettimeslot", requestOptions)
+				.then(response => response.text())
+				.then(result => {
+					var data = JSON.parse(result);
+					// console.log("before if" + data.length);
+					if(data[0] == null){
+                        console.log("null")
+                        alert("null");
+						str = "<option>00:00</option><option>01:00</option><option>02:00</option><option>03:00</option><option>04:00</option><option>05:00</option><option>06:00</option><option>07:00</option><option>08:00</option><option>09:00</option><option>10:00</option><option>11:00</option><option>12:00</option><option>13:00</option><option>14:00</option><option>15:00</option><option>16:00</option><option>17:00</option><option>18:00</option><option>19:00</option><option>20:00</option><option>21:00</option><option>22:00</option><option>23:00</option>"
+						document.getElementById("bookingTime").innerHTML = str;
+					}
+					else{
+						console.log("else");
+						for (var i = 0; i < data.length; i++) {
+						str += "<option>" + data[i].bookingTime + "</option>"
+					}
+					document.getElementById("bookingTime").innerHTML = str;
+					}
+				})
+				.catch(error => console.log('error', error));
+			}
+		</script>
+	</head>
+	<body class="is-preload">
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Header -->
+					<header id="header">
+						<div class="inner">
+
+							<!-- Logo -->
+								<a href="index.html" class="logo">
+									<span class="symbol"><img src="images/logo.svg" alt="" /></span><span class="title">Phantom</span>
+								</a>
+
+							<!-- Nav -->
+								<nav>
+									<ul>
+										<li><a href="#menu">Menu</a></li>
+									</ul>
+								</nav>
+
+						</div>
+					</header>
+
+				<!-- Menu -->
+					<nav id="menu">
+						<h2>Menu</h2>
+						<ul>
+							<li><a href="index.html">Home</a></li>
+							<li><a href="generic.html">Ipsum veroeros</a></li>
+							<li><a href="generic.html">Tempus etiam</a></li>
+							<li><a href="generic.html">Consequat dolor</a></li>
+							<li><a href="elements.html">Elements</a></li>
+						</ul>
+					</nav>
+
+				<!-- Main -->
+					<div id="main">
+						<div class="inner">
+							<h1>Book a Washing Machine</h1>
+							<p>Welcome to our booking page! Here at LaundroTech we give you options to book your preferred timeslot and date to suit your needs. We believe that our customers should be given every opportunity to have their days planned ahead without the worry of having a 
+								any worries if they can wash their dirty laundry at a given time. With LaundroTech, we provide services such as booking multiple machines as well for those who have large numbers of laundry or big items that may not fit into just one washing machine. Begin 
+								your hassle free washing and come book with us!
+							</p>
+						
+							
+							<!-- <input type="text" id="bookingDate" name="bookingDate" value="Pick a Date" readonly>-->
+							<input name="bookingDate" type="date" id="bookingDate" value="Pick a Date" onload="selectDate()" onchange="changeTimeslot()">
+								<select name= "bookingTime" id= "bookingTime">
+									<option value="chooseTimeslot" selected disabled hidden>Choose a Timeslot</option>
+									<option value="0000">0000</option>
+									<option value="0100">0100</option>
+									<option value="0200">0200</option>
+									<option value="0300">0300</option>
+									<option value="0400">0400</option>
+									<option value="0500">0500</option>
+									<option value="0600">0600</option>
+									<option value="0700">0700</option>
+									<option value="0800">0800</option>
+									<option value="0900">0900</option>
+									<option value="1000">1000</option>
+									<option value="1100">1100</option>
+									<option value="1200">1200</option>
+									<option value="1300">1300</option>
+									<option value="1400">1400</option>
+									<option value="1500">1500</option>
+									<option value="1600">1600</option>
+									<option value="1700">1700</option>
+									<option value="1800">1800</option>
+									<option value="1900">1900</option>
+									<option value="2000">2000</option>
+									<option value="2100">2100</option>
+									<option value="2200">2200</option>
+									<option value="2300">2300</option>
+								</select>
+						
+							<br><br><br><br><br><br><br><br>
+						
+							<!-- <span class="image main"><img src="images/pic13.jpg" alt="" /></span>
+							<p>Donec eget ex magna. Interdum et malesuada fames ac ante ipsum primis in faucibus. Pellentesque venenatis dolor imperdiet dolor mattis sagittis. Praesent rutrum sem diam, vitae egestas enim auctor sit amet. Pellentesque leo mauris, consectetur id ipsum sit amet, fergiat. Pellentesque in mi eu massa lacinia malesuada et a elit. Donec urna ex, lacinia in purus ac, pretium pulvinar mauris. Curabitur sapien risus, commodo eget turpis at, elementum convallis elit. Pellentesque enim turpis, hendrerit tristique.</p>
+							<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis dapibus rutrum facilisis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Etiam tristique libero eu nibh porttitor fermentum. Nullam venenatis erat id vehicula viverra. Nunc ultrices eros ut ultricies condimentum. Mauris risus lacus, blandit sit amet venenatis non, bibendum vitae dolor. Nunc lorem mauris, fringilla in aliquam at, euismod in lectus. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. In non lorem sit amet elit placerat maximus. Pellentesque aliquam maximus risus, vel venenatis mauris vehicula hendrerit.</p>
+							<p>Interdum et malesuada fames ac ante ipsum primis in faucibus. Pellentesque venenatis dolor imperdiet dolor mattis sagittis. Praesent rutrum sem diam, vitae egestas enim auctor sit amet. Pellentesque leo mauris, consectetur id ipsum sit amet, fersapien risus, commodo eget turpis at, elementum convallis elit. Pellentesque enim turpis, hendrerit tristique lorem ipsum dolor.</p> -->
+						
+						</div>
+					</div>
+
+				<!-- Footer -->
+					<footer id="footer">
+						<div class="inner">
+							<section>
+								<h2>Get in touch</h2>
+								<form method="post" action="#">
+									<div class="fields">
+										<div class="field half">
+											<input type="text" name="name" id="name" placeholder="Name" />
+										</div>
+										<div class="field half">
+											<input type="email" name="email" id="email" placeholder="Email" />
+										</div>
+										<div class="field">
+											<textarea name="message" id="message" placeholder="Message"></textarea>
+										</div>
+									</div>
+									<ul class="actions">
+										<li><input type="submit" value="Send" class="primary" /></li>
+									</ul>
+								</form>
+							</section>
+							<section>
+								<h2>Follow</h2>
+								<ul class="icons">
+									<li><a href="#" class="icon brands style2 fa-twitter"><span class="label">Twitter</span></a></li>
+									<li><a href="#" class="icon brands style2 fa-facebook-f"><span class="label">Facebook</span></a></li>
+									<li><a href="#" class="icon brands style2 fa-instagram"><span class="label">Instagram</span></a></li>
+									<li><a href="#" class="icon brands style2 fa-dribbble"><span class="label">Dribbble</span></a></li>
+									<li><a href="#" class="icon brands style2 fa-github"><span class="label">GitHub</span></a></li>
+									<li><a href="#" class="icon brands style2 fa-500px"><span class="label">500px</span></a></li>
+									<li><a href="#" class="icon solid style2 fa-phone"><span class="label">Phone</span></a></li>
+									<li><a href="#" class="icon solid style2 fa-envelope"><span class="label">Email</span></a></li>
+								</ul>
+							</section>
+							<ul class="copyright">
+								<li>&copy; Untitled. All rights reserved</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+							</ul>
+						</div>
+					</footer>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+	</body>
+</html>

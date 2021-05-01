@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>LaundraTech - Receipt</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="invoiceAssets/css/bootstrap.min.css" rel="stylesheet">
+    <link href="invoiceAssets/css/invoice.css" rel="stylesheet">
+    <script src="invoiceAssets/js/jquery-1.11.1.min.js"></script>
+    <script src="invoiceAssets/js/bootstrap.min.js"></script>
+    <script src="invoiceAssets/js/invoice.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="well col-xs-10 col-sm-10 col-md-6 col-xs-offset-1 col-sm-offset-1 col-md-offset-3">
+                <div class="row">
+                    <div class="col-xs-6 col-sm-6 col-md-6">
+                        <address>
+                            <strong>LaundroTech</strong>
+                            <br>
+                            2135 Sunset Blvd
+                            <br>
+                            Los Angeles, CA 90026
+                            <br>
+                        </address>
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-6 text-right">
+                        <p>
+                            <em id="todayDate"></em>
+                        </p>
+                        <p>
+                            <em id="receiptNo"></em>
+                        </p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="text-center">
+                        <h1>Receipt</h1>
+                    </div>
+                    </span>
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Booking Details</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="col-md-9"><em>Washing Machine number</em></td>
+                                <td class="col-md-1" id="washingMachineID"></td>
+                            </tr>
+                            <tr>
+                                <td class="col-md-9"><em>Date</em></td>
+                                <td class="col-md-1" id="bookingDate"></td>
+                            </tr>
+                            <tr>
+                                <td class="col-md-9"><em>Time</em></td>
+                                <td class="col-md-1" id="bookingTime"></td>
+                            </tr>
+    
+                            <tr>
+                                <td class="col-md-9"><em>Branch Location</em></td>
+                                <td class="col-md-3" id="location"></td>
+                            </tr>
+                            <tr>
+                                <td class="col-md-5"><em>Address</em></td>
+                                <td class="col-md-7" id="washingMachineAddress"></td>
+                            </tr>
+                            <tr>
+                                <td class="col-md-9"><em>Washing Machine Booking Fees</em></td>
+                                <td class="col-md-3" id="price"></td>
+                            </tr>
+                            <tr>
+                                <td class="col-md-9"><em>Booking Fees</em></h4></td>
+                                <td class="col-md-3" id="bookingFee"></td>
+                            </tr>
+                            <tr>
+                                <td class="col-md-9"><em>Remaining Credits</em></h4></td>
+                                <td class="col-md-3" id="credit"></td>
+                            </tr>
+                            <tr>
+                                <td class="col-md-9"><em>Booking Code</em></h4></td>
+                                <td class="col-md-3" id="bookingCode"></td>
+                            </tr>
+                            <tr>
+                                <td> &nbsp; </td>
+                                <td> &nbsp; </td>
+                                <td class="text-right"><h4><strong>Total:&nbsp;</strong></h4></td>
+                                <td class="text-center text-danger" id="total"><h4><strong></strong></h4></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <a href="index.html">
+                        <button type="button" class="btn btn-success btn-lg btn-block">
+                            Back to Home Page
+                        </button>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </body>
+    </html>
