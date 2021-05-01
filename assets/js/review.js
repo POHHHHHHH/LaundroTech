@@ -116,6 +116,8 @@ function checkout(){
             raw = JSON.stringify({"query":"INSERT INTO laundrotech.Booking (FK_userID,FK_timeslotID,FK_washingMachineID,bookingDate,startTime,endTime,bookingStatus,bookingCode) VALUES (" + 
                         sessionStorage.getItem("userID") + "," + sessionStorage.getItem("timeslotID") + "," + sessionStorage.getItem("washingMachineID") + ",'" + sessionStorage.getItem("bookingDate") + "','" + sessionStorage.getItem("bookingTime") + "','" + 
                         endHr + "'," + "'active','" + bookingCode + "');"});
+
+            sessionStorage.setItem("bookingCode", bookingCode);
             requestOptions = {
                 method: 'POST',
                 headers: myHeaders,
@@ -155,7 +157,6 @@ function checkout(){
             var data = JSON.parse(result);
             raw = JSON.stringify({"query":"INSERT INTO laundrotech.Payment (FK_userID, FK_bookingID, price, status) VALUES ('" + sessionStorage.getItem("userID") + "','" + data[0].bookingID + "','" 
                             + sessionStorage.getItem("total") + "','completed')" });
-            alert(raw);
             requestOptions = {
                 method: 'POST',
                 headers: myHeaders,

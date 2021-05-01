@@ -26,12 +26,11 @@ function loadInvoice(){
     month = monthArray[parseInt(month) - 1];
     str = "<td class=\"col-md-1\" id=\"bookingDate\">" + day + " " + month + " " + year + "</td>";
     document.getElementById("bookingDate").innerHTML = str;
-
     str = "<td class=\"col-md-1\" id=\"bookingTime\">" + sessionStorage.getItem("bookingTime") + "</td>";
     document.getElementById("bookingTime").innerHTML = str;
     str = "<td class=\"col-md-1\" id=\"location\">" + sessionStorage.getItem("location") + "</td>";
     document.getElementById("location").innerHTML = str;
-    str = "<td class=\"col-md-1\" id=\"washingmachineAddress\">" + sessionStorage.getItem("washingMachineAddress") + "</td>";
+    str = "<td class=\"col-md-1\" id=\"washingMachineAddress\">" + sessionStorage.getItem("washingMachineAddress") + "</td>";
     document.getElementById("washingMachineAddress").innerHTML = str;
     str = "<td class=\"col-md-1\" id=\"price\">$" + sessionStorage.getItem("price") + "</td>";
     document.getElementById("price").innerHTML = str;

@@ -1,8 +1,8 @@
 var sha256 = function sha256(ascii) {
 	function rightRotate(value, amount) {
-		return (value>>>amount) | (value<<(32 - amount));
+		return (value >>> amount) | (value << (32 - amount));
 	};
-	
+
 	var mathPow = Math.pow;
 	var maxWord = mathPow(2, 32);
 	var lengthProperty = 'length'
@@ -10,8 +10,8 @@ var sha256 = function sha256(ascii) {
 	var result = ''
 
 	var words = [];
-	var asciiBitLength = ascii[lengthProperty]*8;
-	
+	var asciiBitLength = ascii[lengthProperty] * 8;
+
 	//* caching results is optional - remove/add slash from front of this line to toggle
 	// Initial hash value: first 32 bits of the fractional parts of the square roots of the first 8 primes
 	// (we actually calculate the first 64, but extra values are just ignored)
@@ -30,21 +30,21 @@ var sha256 = function sha256(ascii) {
 			for (i = 0; i < 313; i += candidate) {
 				isComposite[i] = candidate;
 			}
-			hash[primeCounter] = (mathPow(candidate, .5)*maxWord)|0;
-			k[primeCounter++] = (mathPow(candidate, 1/3)*maxWord)|0;
+			hash[primeCounter] = (mathPow(candidate, .5) * maxWord) | 0;
+			k[primeCounter++] = (mathPow(candidate, 1 / 3) * maxWord) | 0;
 		}
 	}
-	
+
 	ascii += '\x80' // Append Ƈ' bit (plus zero padding)
-	while (ascii[lengthProperty]%64 - 56) ascii += '\x00' // More zero padding
+	while (ascii[lengthProperty] % 64 - 56) ascii += '\x00' // More zero padding
 	for (i = 0; i < ascii[lengthProperty]; i++) {
 		j = ascii.charCodeAt(i);
-		if (j>>8) return; // ASCII check: only accept characters in range 0-255
-		words[i>>2] |= j << ((3 - i)%4)*8;
+		if (j >> 8) return; // ASCII check: only accept characters in range 0-255
+		words[i >> 2] |= j << ((3 - i) % 4) * 8;
 	}
-	words[words[lengthProperty]] = ((asciiBitLength/maxWord)|0);
+	words[words[lengthProperty]] = ((asciiBitLength / maxWord) | 0);
 	words[words[lengthProperty]] = (asciiBitLength)
-	
+
 	// process each chunk
 	for (j = 0; j < words[lengthProperty];) {
 		var w = words.slice(j, j += 16); // The message is expanded into 64 words as part of the iteration
@@ -52,7 +52,7 @@ var sha256 = function sha256(ascii) {
 		// This is now the undefinedworking hash", often labelled as variables a...g
 		// (we have to truncate as well, otherwise extra entries at the end accumulate
 		hash = hash.slice(0, 8);
-		
+
 		for (i = 0; i < 64; i++) {
 			var i2 = i + j;
 			// Expand the message into 64 words
@@ -63,144 +63,154 @@ var sha256 = function sha256(ascii) {
 			var a = hash[0], e = hash[4];
 			var temp1 = hash[7]
 				+ (rightRotate(e, 6) ^ rightRotate(e, 11) ^ rightRotate(e, 25)) // S1
-				+ ((e&hash[5])^((~e)&hash[6])) // ch
+				+ ((e & hash[5]) ^ ((~e) & hash[6])) // ch
 				+ k[i]
 				// Expand the message schedule if needed
 				+ (w[i] = (i < 16) ? w[i] : (
-						w[i - 16]
-						+ (rightRotate(w15, 7) ^ rightRotate(w15, 18) ^ (w15>>>3)) // s0
-						+ w[i - 7]
-						+ (rightRotate(w2, 17) ^ rightRotate(w2, 19) ^ (w2>>>10)) // s1
-					)|0
+					w[i - 16]
+					+ (rightRotate(w15, 7) ^ rightRotate(w15, 18) ^ (w15 >>> 3)) // s0
+					+ w[i - 7]
+					+ (rightRotate(w2, 17) ^ rightRotate(w2, 19) ^ (w2 >>> 10)) // s1
+				) | 0
 				);
 			// This is only used once, so *could* be moved below, but it only saves 4 bytes and makes things unreadble
 			var temp2 = (rightRotate(a, 2) ^ rightRotate(a, 13) ^ rightRotate(a, 22)) // S0
-				+ ((a&hash[1])^(a&hash[2])^(hash[1]&hash[2])); // maj
-			
-			hash = [(temp1 + temp2)|0].concat(hash); // We don't bother trimming off the extra ones, they're harmless as long as we're truncating when we do the slice()
-			hash[4] = (hash[4] + temp1)|0;
+				+ ((a & hash[1]) ^ (a & hash[2]) ^ (hash[1] & hash[2])); // maj
+
+			hash = [(temp1 + temp2) | 0].concat(hash); // We don't bother trimming off the extra ones, they're harmless as long as we're truncating when we do the slice()
+			hash[4] = (hash[4] + temp1) | 0;
 		}
-		
+
 		for (i = 0; i < 8; i++) {
-			hash[i] = (hash[i] + oldHash[i])|0;
+			hash[i] = (hash[i] + oldHash[i]) | 0;
 		}
 	}
-	
+
 	for (i = 0; i < 8; i++) {
 		for (j = 3; j + 1; j--) {
-			var b = (hash[i]>>(j*8))&255;
+			var b = (hash[i] >> (j * 8)) & 255;
 			result += ((b < 16) ? 0 : '') + b.toString(16);
 		}
 	}
 	return result;
 };
 
-function checkLoginInfo(){
+function checkLoginInfo() {
+	event.preventDefault();
+
 	var getUsername = document.getElementById("loginUsername").value;
 	var getPassword = document.getElementById("loginPassword").value;
 	//alert(getUsername);
 	var shaPassword = sha256(getPassword);
 	//alert(shaPassword);
-	var myHeaders = new Headers(); 
-    myHeaders.append("Content-Type", "application/json");
-    var raw = JSON.stringify({
-    	"query" : "SELECT * FROM laundrotech.User WHERE username ='"+ getUsername +"' and password = '"+ shaPassword +"';"
-    	});
-    
-    console.log(raw);
-    var requestOptions = {
-        method: 'POST',
-        headers: myHeaders,
-        body: raw,
-        redirect: 'follow'
+	var myHeaders = new Headers();
+	myHeaders.append("Content-Type", "application/json");
+	var raw = JSON.stringify({
+		"query": "SELECT * FROM laundrotech.User WHERE username ='" + getUsername + "' and password = '" + shaPassword + "';"
+	});
+
+	console.log(raw);
+	var requestOptions = {
+		method: 'POST',
+		headers: myHeaders,
+		body: raw,
+		redirect: 'follow'
+	}
+
+	fetch("https://3rczj928aa.execute-api.us-east-1.amazonaws.com/prod/login", requestOptions)
+		.then(response => response.text())
+		.then(result => {
+			//alert("check1");
+			var data = JSON.parse(result);
+			if (data[0] == null) {
+				console.log("Wrong Username and/or Password");
+				alert("Wrong Username and/or Password");
+			}
+			else {
+				console.log("You have logged into LaundroTech");
+				alert("You have logged into LaundroTech");
+				sessionStorage.setItem("userID", data[0].userID);
+				sessionStorage.setItem("username", data[0].username);
+				sessionStorage.setItem("credit", data[0].credit);
+				sessionStorage.setItem("role", data[0].role);
+				console.log(sessionStorage.getItem('userID'));
+				console.log(sessionStorage.getItem('username'));
+				console.log(sessionStorage.getItem('credit'));
+				console.log(sessionStorage.getItem('role'));
+				window.location.href = "index.html";
+			}
+		})
+		.catch(error => console.log('error', error));
 }
-    
-    fetch("https://3rczj928aa.execute-api.us-east-1.amazonaws.com/prod/login", requestOptions)
-	.then(response => response.text())
-	.then(result => {
-		//alert("check1");
-        var data = JSON.parse(result);
-        if(data[0] == null){
-			console.log("Wrong Username and/or Password");
-			alert("Wrong Username and/or Password");
-		}
-        else{
-        	console.log("You have logged into LaundroTech");
-        	alert("You have logged into LaundroTech");
-			sessionStorage.setItem("userID", data[0].userID);
-			sessionStorage.setItem("username", data[0].username);
-			sessionStorage.setItem("credit", data[0].credit);
-			sessionStorage.setItem("role", data[0].role);
-			console.log(sessionStorage.getItem('userID'));
-	        console.log(sessionStorage.getItem('username'));
-	        console.log(sessionStorage.getItem('credit'));
-			console.log(sessionStorage.getItem('role'));
-			window.location.href = "index.html";
-		}
-	})
-	.catch(error => console.log('error', error));
-}
-  
-  function checkRegisterInfo(){
-  	var getUsername = document.getElementById("RegisterUsername").value;
-  	var getEmail = document.getElementById("RegisterEmail").value;
-  	var getPassword = document.getElementById("RegisterPassword").value;
-  	var getName = document.getElementById("RegisterName").value;
-  	var getContactNo = document.getElementById("RegisterContactNo").value;
-  	//alert(getUsername);
-  	//alert(getEmail);
-  	//alert(getPassword);
-  	//alert(getName);
-  	//alert(getContactNo);
-  	var shaPassword = sha256(getPassword);
+
+function checkRegisterInfo() {
+	event.preventDefault();
+	var getUsername = document.getElementById("RegisterUsername").value;
+	var getEmail = document.getElementById("RegisterEmail").value;
+	var getPassword = document.getElementById("RegisterPassword").value;
+	var getName = document.getElementById("RegisterName").value;
+	var getContactNo = document.getElementById("RegisterContactNo").value;
+	//alert(getUsername);
+	//alert(getEmail);
+	//alert(getPassword);
+	//alert(getName);
+	//alert(getContactNo);
+	var shaPassword = sha256(getPassword);
 	//alert(shaPassword);
-  	var myHeaders = new Headers(); 
-    myHeaders.append("Content-Type", "application/json");
-    var raw = JSON.stringify({
-    	"query" : "SELECT * FROM laundrotech.User WHERE username ='"+ getUsername +"';"
-    	});
-    
-    console.log(raw);
-    var requestOptions = {
-        method: 'POST',
-        headers: myHeaders,
-        body: raw,
-        redirect: 'follow'
+	var myHeaders = new Headers();
+	myHeaders.append("Content-Type", "application/json");
+	var raw = JSON.stringify({
+		"query": "SELECT * FROM laundrotech.User WHERE username ='" + getUsername + "';"
+	});
+
+	console.log(raw);
+	var requestOptions = {
+		method: 'POST',
+		headers: myHeaders,
+		body: raw,
+		redirect: 'follow'
+	}
+	var user = "user";
+	const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+	var emailValidate = re.test(String(getEmail).toLowerCase());
+
+	if (getUsername != null && getPassword != null && emailValidate === true && getName != null && Number.isInteger(parseInt(getContactNo)) === true && getContactNo != null) {
+
+		fetch("https://3rczj928aa.execute-api.us-east-1.amazonaws.com/prod/login", requestOptions)
+			.then(response => response.text())
+			.then(result => {
+
+				var data = JSON.parse(result);
+				if (data[0] == null) {
+					console.log("You have created an account with LaundroTech");
+
+					console.log(sessionStorage.getItem('userID'));
+					console.log(sessionStorage.getItem('username'));
+					console.log(sessionStorage.getItem('credit'));
+
+					raw = JSON.stringify({ "query": "INSERT INTO laundrotech.User (username,password,role,fullName,email,contactNo) VALUES ('" + getUsername + "','" + shaPassword + "','" + user + "','" + getName + "','" + getEmail + "','" + getContactNo + "');" });
+
+
+					console.log(raw);
+					requestOptions = {
+						method: 'POST',
+						headers: myHeaders,
+						body: raw,
+						redirect: 'follow'
+					}
+
+					fetch("https://3rczj928aa.execute-api.us-east-1.amazonaws.com/prod/register", requestOptions)
+						.then(response => response.text())
+					alert("You have created an account with LaundroTech");
+
+					window.location.href = "login.html";
+				}
+				else {
+
+					console.log("Username has already been taken");
+					alert("Username has already been taken");
+				}
+			})
+			.catch(error => console.log('error', error));
+	}
 }
-      
-    fetch("https://3rczj928aa.execute-api.us-east-1.amazonaws.com/prod/login", requestOptions)
-	.then(response => response.text())
-	.then(result => {
-		
-        var data = JSON.parse(result);
-          if(data[0] == null){
-        	  console.log("You have created an account with LaundroTech");
-          	  alert("You have created an account with LaundroTech");
-
-      	    console.log(sessionStorage.getItem('userID'));
-	        console.log(sessionStorage.getItem('username'));
-	        console.log(sessionStorage.getItem('credit'));
-          	
-    raw = JSON.stringify({"query":"INSERT INTO laundrotech.User (username,password,role,fullName,email,contactNo,credit) VALUES ('" + sessionStorage.getItem("username") + "','" + sessionStorage.getItem("password") + "','" + sessionStorage.getItem("role") + "','" + sessionStorage.getItem("fullName") + "','" + sessionStorage.getItem("email") + "','" + sessionStorage.getItem("contactNo") + "','" + sessionStorage.getItem("credit") + "');"});
-
- 
-    console.log(raw);
-    requestOptions = {
-        method: 'POST',
-        headers: myHeaders,
-        body: raw,
-        redirect: 'follow'
-        }
-    
-    fetch("https://3rczj928aa.execute-api.us-east-1.amazonaws.com/prod/register", requestOptions)
-	.then(response => response.text())
-		window.location.href = "login.html";
-  		}
-          else {
-            	
-        	    console.log("Username has already been taken");
-      			alert("Username has already been taken");
-  		}
-  	})
-  	.catch(error => console.log('error', error));
-  }

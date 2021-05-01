@@ -157,7 +157,7 @@ function storeWMDetails(row){
 
     sessionStorage.setItem("washingMachineID", row.cells[0].innerHTML);
     sessionStorage.setItem("price", row.cells[3].innerHTML);
-    sessionStorage.setItem("washingMachineAddres", row.cells[4].innerHTML);
+    sessionStorage.setItem("washingMachineAddress", row.cells[4].innerHTML);
     sessionStorage.setItem("bookingDate", selectedDate);
     sessionStorage.setItem("bookingTime", timeslot);
 
