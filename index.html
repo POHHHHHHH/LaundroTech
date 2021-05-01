@@ -5,19 +5,31 @@
 	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
 -->
 <html>
-
-<link href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round"
-	rel="stylesheet">
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-<script
-	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
-<script> </script>
+<script>
+        // define the callAPI function that takes a first name and last name as parameters
+        var callAPI = (firstName,lastName)=>{
+            // instantiate a headers object
+            var myHeaders = new Headers(); 
+            // add content type header to object
+            myHeaders.append("Content-Type", "application/json");
+            // using built in JSON utility package turn object to string and store in a variable
+            var raw = JSON.stringify({"firstName":firstName,"lastName":lastName});
+            // create a JSON object with parameters for API call and store in a variable
+            var requestOptions = {
+                method: 'POST',
+                headers: myHeaders,
+                body: raw,
+                redirect: 'follow'
+            };
+		
+		
+            // make API call with parameters and use promises to get response
+            fetch("https://hlimcu55w5.execute-api.us-east-1.amazonaws.com/JM/login", requestOptions)
+            .then(response => response.text())
+            .then(result => alert(JSON.parse(result).body))
+            .catch(error => console.log('error', error));
+        }
+    </script>
 <head>
 <title>Phantom by HTML5 UP</title>
 <meta charset="utf-8" />
@@ -27,10 +39,6 @@
 <noscript>
 	<link rel="stylesheet" href="assets/css/noscript.css" />
 </noscript>
-
-<style>
-
-</style>
 </head>
 <body class="is-preload">
 	<!-- Wrapper -->
@@ -71,74 +79,145 @@
 		<div id="main">
 			<div class="inner">
 				<header>
-					<!--  <h1>This is Phantom, a free, fully responsive site<br />
-								template designed by <a href="http://html5up.net">HTML5 UP</a>.</h1>
-								<p>Etiam quis viverra lorem, in semper lorem. Sed nisl arcu euismod sit amet nisi euismod sed cursus arcu elementum ipsum arcu vivamus quis venenatis orci lorem ipsum et magna feugiat veroeros aliquam. Lorem ipsum dolor sit amet nullam dolore.</p>
-								-->
+					<h1>
+						This is Phantom, a free, fully responsive site<br /> template
+						designed by <a href="http://html5up.net">HTML5 UP</a>.
+					</h1>
+					<p>Etiam quis viverra lorem, in semper lorem. Sed nisl arcu
+						euismod sit amet nisi euismod sed cursus arcu elementum ipsum arcu
+						vivamus quis venenatis orci lorem ipsum et magna feugiat veroeros
+						aliquam. Lorem ipsum dolor sit amet nullam dolore.</p>
 					<form>
-
-						<label for="loginUsername"><b>Username</b></label> <input type="text"
-							placeholder="Enter Username" name="loginUsername" id="loginUsername"
-							required> 
-							</br>
-					    <label for="loginPassword"><b>Password</b></label> <input type="password" 
-					        placeholder="Enter Password" name="loginPassword" id="loginPassword" 
-					        required>
-
-						<button type="submit" onclick="checkLoginInfo()">Login</button>
-						<button href="#myModal" class="trigger-btn" data-toggle="modal">Register</button>
-
-						<!-- <a href="#">Forgot Password?</a>
-
-						 Modal HTML -->
-						<div id="myModal" class="modal fade">
-							<div class="modal-dialog modal-login">
-								<div class="modal-content">
-									<div class="modal-header">
-										<div class="avatar"></div>
-										<h4 class="modal-title">Register</h4>
-										<!--  <button type="button" class="close" data-dismiss="modal"
-											aria-hidden="true">&times;</button> -->
-									</div>
-									<div class="modal-body">
-										<!--  <form action="/examples/actions/confirmation.php"
-											method="post"> -->
-											<div class="form-group">
-												<input type="text" placeholder="Username" name="RegisterUsername"
-													id="RegisterUsername" required>
-											</div>
-											<div class="form-group">
-												<input type="text" placeholder="Name" name="RegisterName"
-													id="RegisterName" required>
-											</div>
-											<div class="form-group">
-												<input type="email" placeholder="Email" name="RegisterEmail"
-										            id="RegisterEmail" required>
-											</div>
-											<div class="form-group">
-												<input type="tel" placeholder="Contact Number" name="RegisterContactNo"
-													id="RegisterContactNo" required>
-											</div>
-											<div class="form-group">
-												<input type="password" placeholder="Password" name="RegisterPassword" 
-													id="RegisterPassword" required>
-											</div>
-											<div class="form-group">
-												<button type="submit" onclick="checkRegisterInfo()"
-													class="btn btn-primary btn-lg btn-block login-btn">Create
-													Account</button>
-											</div>
-										</form>
-									</div>
-
-								</div>
-							</div>
-						</div>
-
+						<label>First Nname :</label> <input type="text" id="fName">
+						<label>Last Name :</label> <input type="text" id="lName">
+						<!-- set button onClick method to call function we defined passing input values as parameters -->
+						<button type="button"
+							onclick="callAPI(document.getElementById('fName').value,document.getElementById('lName').value)">Call
+							API</button>
 					</form>
 
 				</header>
-				
+				<section class="tiles">
+					<article class="style1">
+						<span class="image"> <img src="images/pic01.jpg" alt="" />
+						</span> <a href="generic.html">
+							<h2>Magna</h2>
+							<div class="content">
+								<p>Sed nisl arcu euismod sit amet nisi lorem etiam dolor
+									veroeros et feugiat.</p>
+							</div>
+						</a>
+					</article>
+					<article class="style2">
+						<span class="image"> <img src="images/pic02.jpg" alt="" />
+						</span> <a href="generic.html">
+							<h2>Lorem</h2>
+							<div class="content">
+								<p>Sed nisl arcu euismod sit amet nisi lorem etiam dolor
+									veroeros et feugiat.</p>
+							</div>
+						</a>
+					</article>
+					<article class="style3">
+						<span class="image"> <img src="images/pic03.jpg" alt="" />
+						</span> <a href="generic.html">
+							<h2>Feugiat</h2>
+							<div class="content">
+								<p>Sed nisl arcu euismod sit amet nisi lorem etiam dolor
+									veroeros et feugiat.</p>
+							</div>
+						</a>
+					</article>
+					<article class="style4">
+						<span class="image"> <img src="images/pic04.jpg" alt="" />
+						</span> <a href="generic.html">
+							<h2>Tempus</h2>
+							<div class="content">
+								<p>Sed nisl arcu euismod sit amet nisi lorem etiam dolor
+									veroeros et feugiat.</p>
+							</div>
+						</a>
+					</article>
+					<article class="style5">
+						<span class="image"> <img src="images/pic05.jpg" alt="" />
+						</span> <a href="generic.html">
+							<h2>Aliquam</h2>
+							<div class="content">
+								<p>Sed nisl arcu euismod sit amet nisi lorem etiam dolor
+									veroeros et feugiat.</p>
+							</div>
+						</a>
+					</article>
+					<article class="style6">
+						<span class="image"> <img src="images/pic06.jpg" alt="" />
+						</span> <a href="generic.html">
+							<h2>Veroeros</h2>
+							<div class="content">
+								<p>Sed nisl arcu euismod sit amet nisi lorem etiam dolor
+									veroeros et feugiat.</p>
+							</div>
+						</a>
+					</article>
+					<article class="style2">
+						<span class="image"> <img src="images/pic07.jpg" alt="" />
+						</span> <a href="generic.html">
+							<h2>Ipsum</h2>
+							<div class="content">
+								<p>Sed nisl arcu euismod sit amet nisi lorem etiam dolor
+									veroeros et feugiat.</p>
+							</div>
+						</a>
+					</article>
+					<article class="style3">
+						<span class="image"> <img src="images/pic08.jpg" alt="" />
+						</span> <a href="generic.html">
+							<h2>Dolor</h2>
+							<div class="content">
+								<p>Sed nisl arcu euismod sit amet nisi lorem etiam dolor
+									veroeros et feugiat.</p>
+							</div>
+						</a>
+					</article>
+					<article class="style1">
+						<span class="image"> <img src="images/pic09.jpg" alt="" />
+						</span> <a href="generic.html">
+							<h2>Nullam</h2>
+							<div class="content">
+								<p>Sed nisl arcu euismod sit amet nisi lorem etiam dolor
+									veroeros et feugiat.</p>
+							</div>
+						</a>
+					</article>
+					<article class="style5">
+						<span class="image"> <img src="images/pic10.jpg" alt="" />
+						</span> <a href="generic.html">
+							<h2>Ultricies</h2>
+							<div class="content">
+								<p>Sed nisl arcu euismod sit amet nisi lorem etiam dolor
+									veroeros et feugiat.</p>
+							</div>
+						</a>
+					</article>
+					<article class="style6">
+						<span class="image"> <img src="images/pic11.jpg" alt="" />
+						</span> <a href="generic.html">
+							<h2>Dictum</h2>
+							<div class="content">
+								<p>Sed nisl arcu euismod sit amet nisi lorem etiam dolor
+									veroeros et feugiat.</p>
+							</div>
+						</a>
+					</article>
+					<article class="style4">
+						<span class="image"> <img src="images/pic12.jpg" alt="" />
+						</span> <a href="generic.html">
+							<h2>Pretium</h2>
+							<div class="content">
+								<p>Sed nisl arcu euismod sit amet nisi lorem etiam dolor
+									veroeros et feugiat.</p>
+							</div>
+						</a>
+					</article>
 				</section>
 			</div>
 		</div>
@@ -148,35 +227,25 @@
 			<div class="inner">
 				<section>
 					<h2>Get in touch</h2>
+					<form method="post" action="#">
 						<div class="fields">
 							<div class="field half">
-								<li><a href="#" class="icon solid style2 fa-phone"><span
-								class="label">Phone</span></a><p> +65 6556 8000 </p></li>
+								<input type="text" name="name" id="name" placeholder="Name" />
 							</div>
 							<div class="field half">
-								<li><a href="#" class="icon solid style2 fa-envelope"><span
-								class="label">Email</span></a><p> laundrotech@ncs.com.sg </p></li>
+								<input type="email" name="email" id="email" placeholder="Email" />
 							</div>
 							<div class="field">
-								<type="message" id="message" placeholder="Message"></textarea>
+								<textarea name="message" id="message" placeholder="Message"></textarea>
 							</div>
 						</div>
-						
-						<!-- <ul class="actions">
+						<ul class="actions">
 							<li><input type="submit" value="Send" class="primary" /></li>
-						</ul> -->
-						
+						</ul>
 					</form>
 				</section>
 				<section>
-				
-				<h2>LaundroTech Pte. Ltd</h2>
-				
-				<p>5 Ang Mo Kio Street 62<br />
-                   NCS Hub, Singapore 569141 <br /></p>
-								
-				
-					<!--  <h2>Follow</h2>
+					<h2>Follow</h2>
 					<ul class="icons">
 						<li><a href="#" class="icon brands style2 fa-twitter"><span
 								class="label">Twitter</span></a></li>
@@ -194,7 +263,7 @@
 								class="label">Phone</span></a></li>
 						<li><a href="#" class="icon solid style2 fa-envelope"><span
 								class="label">Email</span></a></li>
-					</ul> -->
+					</ul>
 				</section>
 				<ul class="copyright">
 					<li>&copy; Untitled. All rights reserved</li>
@@ -211,7 +280,6 @@
 	<script src="assets/js/breakpoints.min.js"></script>
 	<script src="assets/js/util.js"></script>
 	<script src="assets/js/main.js"></script>
-	<script src="assets/js/sha.js"></script>
 
 </body>
 </html>
