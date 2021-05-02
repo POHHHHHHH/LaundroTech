@@ -4,7 +4,7 @@ window.addEventListener('load', function () {
 
     var currentLocation = window.location.href;
 
-    if (userID === null && (!(currentLocation.includes("login.html") || currentLocation.includes("index.html") || currentLocation === "https://master.d8loh5zuotepy.amplifyapp.com"))) {
+    if (userID === null && (!(currentLocation.includes("login.html") || currentLocation.includes("index.html") || currentLocation === "https://master.d8loh5zuotepy.amplifyapp.com/"))) {
         alert(window.location.href);
         alert("Please login before proceeding!")
         window.location.replace("login.html")
