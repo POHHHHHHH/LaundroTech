@@ -6,33 +6,8 @@
 	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
 -->
 <html>
-<script>
-        // define the callAPI function that takes a first name and last name as parameters
-        var callAPI = (firstName,lastName)=>{
-            // instantiate a headers object
-            var myHeaders = new Headers(); 
-            // add content type header to object
-            myHeaders.append("Content-Type", "application/json");
-            // using built in JSON utility package turn object to string and store in a variable
-            var raw = JSON.stringify({"firstName":firstName,"lastName":lastName});
-            // create a JSON object with parameters for API call and store in a variable
-            var requestOptions = {
-                method: 'POST',
-                headers: myHeaders,
-                body: raw,
-                redirect: 'follow'
-            };
-		
-		
-            // make API call with parameters and use promises to get response
-            fetch("https://hlimcu55w5.execute-api.us-east-1.amazonaws.com/JM/login", requestOptions)
-            .then(response => response.text())
-            .then(result => alert(JSON.parse(result).body))
-            .catch(error => console.log('error', error));
-        }
-    </script>
 <head>
-<title>Phantom by HTML5 UP</title>
+<title>LaundroTech</title>
 <meta charset="utf-8" />
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, user-scalable=no" />
@@ -50,12 +25,28 @@
 		<header id="header">
 			<div class="inner">
 
-				<!-- Logo -->
-				<a href="index.html" class="logo"> <span class="symbol"><img
-						src="images/logo.svg" alt="" /></span><span class="title">Phantom</span>
-				</a>
+				<section>
+					<img class="mySlides" src="images/pic16.jpg" style="width:100%">
+					<img class="mySlides" src="images/pic17.jpg" style="width:100%">
+				</section>
 
-				<!-- Nav -->
+				<script>
+					// Automatic Slideshow - change image every 3 seconds
+					var myIndex = 0;
+					carousel();
+
+					function carousel() {
+						var i;
+						var x = document.getElementsByClassName("mySlides");
+						for (i = 0; i < x.length; i++) {
+							x[i].style.display = "none";
+						}
+						myIndex++;
+						if (myIndex > x.length) {myIndex = 1}
+						x[myIndex-1].style.display = "block";
+						setTimeout(carousel, 3000);
+					}
+				</script>
 				<nav>
 					<ul>
 						<li><a href="#menu">Menu</a></li>
