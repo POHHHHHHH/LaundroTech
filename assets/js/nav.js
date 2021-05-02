@@ -1,4 +1,25 @@
 window.addEventListener('load', function() {
+
+    var userID = sessionStorage.getItem("userID");
+
+    var currentLocation = window.location.href;
+
+    if(userID === null && (!(currentLocation.includes("login.html") || currentLocation.includes("index.html")))){
+        alert("Please login before proceeding!")
+        window.location.replace("login.html")
+    }
+    else{
+
+    
+  //  alert(window.location.href);
+    // if(userID === null){
+    //     alert("Please Login")
+    //     window.location.replace("index.html");
+    // }
+    // else{
+
+    // }
+
     str ='';
 
     if(sessionStorage.getItem("role") === null){
@@ -23,6 +44,8 @@ window.addEventListener('load', function() {
     var nav = document.getElementById("menu");
 
     nav.innerHTML = str;
+
+    }
   });
 
 function logout() {
