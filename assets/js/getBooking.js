@@ -58,7 +58,7 @@ function loadReview(){
             document.getElementById("spanEmail").innerHTML = str;
             str = "<span class=\"reviewBooking\"><label class=\"reviewLabel\"><strong>Contact No:</strong></label><label id=\"contactNo\" class=\"reviewValues\">" + data[0].contactNo + "</label></span>";
             document.getElementById("spanContactNo").innerHTML = str;
-            str = "<span class=\"reviewBooking\"><label class=\"reviewLabel\"><strong>Credits remaining :</strong></label><label id=\"creditsRemain\" class=\"reviewValues\"> "+ " $ " + Number(data[0].credit) + "</label></span>";
+            str = "<span class=\"reviewBooking\"><label class=\"reviewLabel\"><strong>Credits remaining :</strong></label><label id=\"creditsRemain\" class=\"reviewValues\"> "+ " $ " + Number(data[0].credit) +".00"+ "</label></span>";
             document.getElementById("spanCreditsRemain").innerHTML = str;
         })
         .catch(error => console.log('error', error));
