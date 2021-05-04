@@ -82,9 +82,6 @@ function getCompletedBooking() {
         .then(response => response.text())
         .then(result => {
             var data = JSON.parse(result);
-            if (data[0] == null) {
-                console.log("null")
-            } else {
                 console.log("else");
 
                 str += "<table style=\"width:100%\"> <tr><th>Booking ID</th><th>Booking Date</th><th>Start Time</th><th>End Time</th><th>Booking Status</th><th>Booking Code</th></tr>"
@@ -94,7 +91,7 @@ function getCompletedBooking() {
                 }
                 str += "</table>"
                 document.getElementById("locationTile2").innerHTML = str;
-            }
+
 
         })
         .catch(error => console.log('error', error));
