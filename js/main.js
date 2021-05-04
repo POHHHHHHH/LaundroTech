@@ -250,7 +250,7 @@ function displayBookingDetails(){
 	var endTime = sessionStorage.getItem("endTime");
 
 	//Display booking details
-	document.getElementById("name").innerHTML= "Dear"+ fullName +", Thank you for using our services.";
+	document.getElementById("name").innerHTML= "Dear "+ fullName +", Thank you for using our services.";
 	document.getElementById("washingMachineID").innerHTML= washingMachineID;
 	document.getElementById("bookingID").innerHTML= bookingID;
 	document.getElementById("date").innerHTML= bookingDate;
