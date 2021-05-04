@@ -4,7 +4,7 @@ window.addEventListener('load', function () {
 
     var currentLocation = window.location.href;
 
-    if(userID === null && currentLocation.includes("index.html")){
+    if(sessionStorage.getItem("role") === null && currentLocation.includes("index.html")){
         str2 = '';
         str2="<li><h2><a href=\"Login.html\">Get Started</a></li></h2>";
     }
